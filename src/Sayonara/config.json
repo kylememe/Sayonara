@@ -1,0 +1,10 @@
+{
+  "AppSettings": {
+    "SiteTitle": "Sayonara"
+  },
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-Sayonara-545454f9-96db-4f99-9d7f-27a5570c6e68;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  }
+}
