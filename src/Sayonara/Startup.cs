@@ -41,10 +41,9 @@ namespace Sayonara
 			services.AddEntityFramework()
 				.AddSqlServer()
 				.AddDbContext<SayonaraContext>(options =>
-				{
-					//how do I add configuration from json file here?
-					options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Sayonara;Trusted_Connection=True;MultipleActiveResultSets=true");
-        });								      
+				{					
+					options.UseSqlServer(Configuration.Get("Data:ConnectionString"));
+				});								      
 
       // Add MVC services to the services container.
       services.AddMvc();      

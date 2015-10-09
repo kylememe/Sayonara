@@ -3,8 +3,6 @@
     "SiteTitle": "Sayonara"
   },
   "Data": {
-    "DefaultConnection": {
-      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Sayonara;Trusted_Connection=True;MultipleActiveResultSets=true"
-    }
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Sayonara;Trusted_Connection=True;MultipleActiveResultSets=true"    
   }
 }
