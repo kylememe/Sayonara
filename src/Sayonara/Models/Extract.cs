@@ -2,7 +2,8 @@
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Metadata;
 using System.Collections.Generic;
-using System.Linq; 
+using System.Linq;
+
 
 namespace Sayonara.Models
 {

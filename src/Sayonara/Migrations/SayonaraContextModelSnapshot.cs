@@ -20,7 +20,8 @@ namespace Sayonara.Migrations
                 {
                     b.Property<int>("ID")
                         .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
+                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity)
+                        .Annotation("SqlServer:ValueGeneration", "Identity");
                     
                     b.Property<DateTime>("CompletionDate");
                     

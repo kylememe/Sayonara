@@ -7,11 +7,11 @@ using Sayonara.Models;
 namespace Sayonara.Migrations
 {
     [ContextType(typeof(SayonaraContext))]
-    partial class Initial
+    partial class Init
     {
         public override string Id
         {
-            get { return "20151008021955_Initial"; }
+            get { return "20151009024916_Init"; }
         }
         
         public override string ProductVersion
@@ -30,7 +30,8 @@ namespace Sayonara.Migrations
                 {
                     b.Property<int>("ID")
                         .GenerateValueOnAdd()
-                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity);
+                        .StoreGeneratedPattern(StoreGeneratedPattern.Identity)
+                        .Annotation("SqlServer:ValueGeneration", "Identity");
                     
                     b.Property<DateTime>("CompletionDate");
                     

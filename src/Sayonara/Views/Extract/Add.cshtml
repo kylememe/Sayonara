@@ -4,7 +4,7 @@
 
 <div class="row">	
   <div class="col-md-8 col-md-offset-2 defaultform">
-    <form action="/Extract/Save" class="form-horizontal">
+    <form asp-controller="Extract" asp-action="Save" class="form-horizontal">
 			<fieldset>
 				<legend>New Extract</legend>
 				<div class="control-group">
@@ -38,7 +38,7 @@
 				<div class="control-group">
 					<div class="controls">
 						<button type="submit" class="btn btn-primary">Submit</button>
-						<a href="/home/index" class="btn btn-default" role="button">Cancel</a>
+						<a asp-controller="Home" asp-action="index" class="btn btn-default" role="button">Cancel</a>
 					</div>
 				</div>
 			</fieldset>

@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Relational.Migrations.Operations;
 
 namespace Sayonara.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         public override void Up(MigrationBuilder migration)
         {
@@ -18,7 +18,8 @@ namespace Sayonara.Migrations
                 name: "Extract",
                 columns: table => new
                 {
-                    ID = table.Column(type: "int", nullable: false),
+                    ID = table.Column(type: "int", nullable: false)
+                        .Annotation("SqlServer:ValueGeneration", "Identity"),
                     CompletionDate = table.Column(type: "datetime2", nullable: false),
                     CreatedBy = table.Column(type: "nvarchar(max)", nullable: true),
                     CurrentCount = table.Column(type: "int", nullable: false),
