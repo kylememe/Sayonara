@@ -3,10 +3,10 @@ using Microsoft.AspNet.Diagnostics;
 using Microsoft.AspNet.Diagnostics.Entity;
 using Microsoft.AspNet.Hosting;
 using Microsoft.Data.Entity;
+using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
-using Microsoft.Framework.Runtime;
 using Sayonara.Models;
 using Sayonara.Services;
 
@@ -14,22 +14,26 @@ namespace Sayonara
 {
   public class Startup
   {
-    public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
+    public Startup(IApplicationEnvironment appEnv)
     {
-      // Setup configuration sources.
+      // Setup configuration sources.      
 
-      var builder = new ConfigurationBuilder(appEnv.ApplicationBasePath)
-        .AddJsonFile("config.json")
-        .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true);
+			var builder = new ConfigurationBuilder()
+			.SetBasePath(appEnv.ApplicationBasePath)
+			.AddJsonFile("config.json")
+			.AddEnvironmentVariables();
 
-      if (env.IsDevelopment())
+			/*
+			if (env.IsDevelopment())
       {
         // This reads the configuration keys from the secret store.
         // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
         builder.AddUserSecrets();
       }
-      builder.AddEnvironmentVariables();
+			*/
+			      
       Configuration = builder.Build();
+
     }
 
     public IConfiguration Configuration { get; set; }
@@ -42,7 +46,7 @@ namespace Sayonara
 				.AddSqlServer()
 				.AddDbContext<SayonaraContext>(options =>
 				{					
-					options.UseSqlServer(Configuration.Get("Data:ConnectionString"));
+					options.UseSqlServer(Configuration.Get<string>("Data:ConnectionString"));
 				});								      
 
       // Add MVC services to the services container.
@@ -59,24 +63,24 @@ namespace Sayonara
       loggerFactory.MinimumLevel = LogLevel.Information;
       loggerFactory.AddConsole();
 
-      // Configure the HTTP request pipeline.
+			// Configure the HTTP request pipeline.
 
-      // Add the following to the request pipeline only in development environment.
-      if (env.IsDevelopment())
-      {
-        app.UseBrowserLink();
-        app.UseErrorPage(ErrorPageOptions.ShowAll);
-        app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
-      }
-      else
-      {
-        // Add Error handling middleware which catches all application specific errors and
-        // sends the request to the following path or controller action.
-        app.UseErrorHandler("/Home/Error");
-      }
+			// Add the following to the request pipeline only in development environment.
+			if (env.IsDevelopment())
+			{
+				app.UseBrowserLink();
+				app.UseDeveloperExceptionPage();
+				app.UseDatabaseErrorPage();
+			}
+			else
+			{
+				// Add Error handling middleware which catches all application specific errors and
+				// sends the request to the following path or controller action.
+				app.UseExceptionHandler("/Home/Error");
+			}
 
-      // Add static files to the request pipeline.
-      app.UseStaticFiles();
+			// Add static files to the request pipeline.
+			app.UseStaticFiles();
 
       // Add cookie-based authentication to the request pipeline.
       app.UseIdentity();

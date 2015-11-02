@@ -7,11 +7,7 @@ namespace Sayonara.Models
   {
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Extract>(b =>
-			{
-				b.Key(e => e.ID);
-				b.Property(e => e.ID).ForSqlServer().UseIdentity();
-			});
+			
     }
     
 		public DbSet<Extract> Extracts { get; set; }		
