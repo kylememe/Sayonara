@@ -10,7 +10,7 @@ namespace Sayonara.Models
 		public static void Initialize(IServiceProvider serviceProvider)
 		{
 			var context = serviceProvider.GetService<SayonaraContext>();
-			if (context.Database.EnsureCreated())
+			if (context.Database.AsRelational().Exists())
 			{
 				if (!context.Extracts.Any())
 				{					
