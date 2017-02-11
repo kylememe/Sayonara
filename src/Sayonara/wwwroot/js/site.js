@@ -7,6 +7,5 @@ $(function () {
       }, function () {
           $(this).removeClass("highlighted");
       }
-    );
-    console.log('hello world')
+    );    
 });

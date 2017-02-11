@@ -36,13 +36,13 @@ div.highlighted{
   cursor: pointer;
 }
 
-.defaultform{	
+.defaultform {    	
 	padding-top: 15px;
 	padding-bottom: 15px;		
-  border-color: #ddd;
+    border-color: #ddd;
 	border-style: solid;
-  border-width: 1px;		
-  border-radius: 4px 4px 0 0;
+    border-width: 1px;		
+    border-radius: 4px 4px 0 0;
 }
 
 div.defaultform div.control-group{
