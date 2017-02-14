@@ -9,28 +9,38 @@ using Sayonara.Models;
 
 namespace Sayonara.Controllers
 {
-  public class ExtractController : Controller
-  {
+	public class ExtractController : Controller
+	{
 		private Sayonara.Data.SayonaraContext _sayonaraContext;
 		public ExtractController(Sayonara.Data.SayonaraContext context)
 		{
 			_sayonaraContext = context;
 		}
-    // GET: /<controller>/
-    public async Task<IActionResult> Index()
-    {
-			return View(await _sayonaraContext.Extracts.ToListAsync());
-    }
-
-    public IActionResult Add()
-    {
-      return View();
-    }
-
-		public IActionResult Save(Extract extract)
+		// GET: /<controller>/
+		public async Task<IActionResult> Index()
 		{
-			return View("Index");
+			return View(await _sayonaraContext.Extracts.ToListAsync());
 		}
-      
-  }
+
+		public IActionResult Add()
+		{
+			return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public ActionResult Save([Bind("Format", "FacilityID", "ExtractionDate")]Extract extract)
+		{
+			_sayonaraContext.Extracts.Add(new Extract
+			{
+				FacilityID = extract.FacilityID,
+				ExtractionDate = extract.ExtractionDate,
+				Format = extract.Format
+			});
+
+			_sayonaraContext.SaveChanges();
+			return View("Index", _sayonaraContext.Extracts);
+		}
+
+	}
 }

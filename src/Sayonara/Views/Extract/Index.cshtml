@@ -16,6 +16,9 @@
 				Extract Date
 			</th>
 			<th>
+				Type
+			</th>
+			<th>
 				Status
 			</th>
 			<th></th>
@@ -31,6 +34,14 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.ExtractionDate)
 				</td>
+				@if (item.Format == ExtractType.CSV)
+				{
+					<td>CSV</td>
+				}
+				else
+				{
+					<td>PDF</td>
+				}
 				<td>
 					@Html.DisplayFor(modelItem => item.Status)
 				</td>

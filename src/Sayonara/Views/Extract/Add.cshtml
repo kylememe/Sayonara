@@ -45,3 +45,26 @@
     </form>
   </div>  
 </div>
+@section scripts
+{
+	<script type="text/javascript">
+		$(function () {
+			var csvButton = $("div.controls button[type='button'].btn-primary");
+			var pdfButton = $("div.controls button[type='button'].btn-default");
+			var format = $("div.controls input[type='hidden']");
+
+			csvButton.click(function () {
+				format.val("csv");
+				csvButton.removeClass("btn-default").addClass("btn-primary");
+				pdfButton.removeClass("btn-primary").addClass("btn-default");
+			});
+
+			pdfButton.click(function () {
+				format.val("pdf");
+				csvButton.removeClass("btn-primary").addClass("btn-default");
+				pdfButton.removeClass("btn-default").addClass("btn-primary");
+			});
+
+		});
+	</script>
+}
