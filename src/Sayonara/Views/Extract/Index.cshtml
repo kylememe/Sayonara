@@ -20,8 +20,7 @@
 			</th>
 			<th>
 				Status
-			</th>
-			<th></th>
+			</th>		
 		</tr>
 	</thead>
 	<tbody>
@@ -32,24 +31,23 @@
 					@Html.DisplayFor(modelItem => item.FacilityID)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.ExtractionDate)
+					@item.ExtractionDate.ToString("MMM dd yyyy")					
 				</td>
 				@if (item.Format == ExtractType.CSV)
 				{
-					<td>CSV</td>
+					<td>
+						<img class="img-thumbnail" src="~/images/csv-outline.png" />
+					</td>
 				}
 				else
 				{
-					<td>PDF</td>
+					<td>
+						<img class="img-thumbnail" src="~/images/pdf-512.png" />
+					</td>
 				}
 				<td>
 					@Html.DisplayFor(modelItem => item.Status)
-				</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-				</td>
+				</td>				
 			</tr>
 		}
 	</tbody>

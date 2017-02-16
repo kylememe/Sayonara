@@ -48,3 +48,9 @@ div.highlighted{
 div.defaultform div.control-group{
 	margin-top: 25px;
 }
+
+.img-thumbnail{
+    width: 45px;
+    height: 20px;
+    border: none;
+}
