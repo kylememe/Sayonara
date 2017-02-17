@@ -12,5 +12,7 @@ namespace Sayonara.Data
 		{			
     }    
 		public DbSet<Extract> Extracts { get; set; }		
+
+		public DbSet<Facility> Facilities { get; set; }
 	}
 }
