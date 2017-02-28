@@ -16,10 +16,10 @@ namespace Sayonara.Controllers
 		{
 			_sayonaraContext = context;
 		}
-		// GET: /<controller>/
+				
 		public async Task<IActionResult> Index()
 		{
-			return View(await _sayonaraContext.Extracts.ToListAsync());
+			return View(await _sayonaraContext.Extracts.Include(e => e.Facility).ToListAsync());
 		}
 
 		public IActionResult Add()

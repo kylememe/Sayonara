@@ -18,8 +18,7 @@ namespace Sayonara.Migrations
 
             modelBuilder.Entity("Sayonara.Models.DocumentationView", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("ID");
 
                     b.Property<int>("FacilityID");
 
@@ -72,8 +71,7 @@ namespace Sayonara.Migrations
 
             modelBuilder.Entity("Sayonara.Models.Facility", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("ID");
 
                     b.Property<string>("Alias");
 

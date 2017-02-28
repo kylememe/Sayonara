@@ -1,12 +1,12 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Sayonara.Models
 {
     public class Facility
     {
+
+			[DatabaseGenerated(DatabaseGeneratedOption.None)]
 			public int ID { get; set; }
 
 			public string Name { get; set; }

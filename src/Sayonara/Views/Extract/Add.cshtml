@@ -6,11 +6,13 @@
   <div class="col-md-8 col-md-offset-2 defaultform">
     <form asp-controller="Extract" asp-action="Save" class="form-horizontal">
 			<fieldset>
-				<legend>New Extract</legend>
+				<legend>
+					New Extract					
+				</legend>
 				<div class="control-group">
 					<label for="facilityID">Facility</label>
-					<div class="controls">						
-						<input type="text" class="form-control" placeholder="Enter Facility Name" name="facilityID" />
+					<div class="controls">
+						<input type="text" class="form-control" placeholder="Enter Facility Name" name="facilityID" id="facilityID" />
 					</div>
 				</div>
 				<div class="control-group">
@@ -63,6 +65,10 @@
 				format.val("pdf");
 				csvButton.removeClass("btn-primary").addClass("btn-default");
 				pdfButton.removeClass("btn-default").addClass("btn-primary");
+			});
+
+			$('#lnkTest').click(function () {				
+				var restults = $.getJSON('/api/Facilities?query=' + $("input[name='facilityID']").val());
 			});
 
 		});

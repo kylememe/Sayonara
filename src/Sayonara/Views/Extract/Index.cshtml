@@ -10,7 +10,7 @@
 	<thead>
 		<tr>
 			<th>
-				FacilityID
+				Facility
 			</th>
 			<th>
 				Extract Date
@@ -28,7 +28,7 @@
 		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.FacilityID)
+					@Html.DisplayFor(modelItem => item.Facility.Name)
 				</td>
 				<td>
 					@item.ExtractionDate.ToString("MMM dd yyyy")					
