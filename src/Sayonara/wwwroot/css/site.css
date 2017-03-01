@@ -31,7 +31,7 @@ a, a:link, a:visited, a:hover, a:active {
   vertical-align: middle;    
 }
 
-div.highlighted{
+div.highlighted, tr.highlighted{
   background-color: whitesmoke;    
   cursor: pointer;
 }
@@ -54,3 +54,5 @@ div.defaultform div.control-group{
     height: 43px;
     border: none;
 }
+
+
