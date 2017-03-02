@@ -18,10 +18,10 @@ namespace Sayonara.Controllers
 
 		// GET: api/values
 		[HttpGet]
-		public async Task<IActionResult> Get(string q)
+		public async Task<IActionResult> Get(string query)
 		{
 			var facilities = await _sayonaraContext.Facilities
-				.Where(f => f.Name.StartsWith(q))
+				.Where(f => f.Name.StartsWith(query))
 				.ToAsyncEnumerable()
 				.ToArray();
 

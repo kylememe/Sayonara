@@ -39,7 +39,7 @@ namespace Sayonara.Controllers
 			});
 
 			_sayonaraContext.SaveChanges();
-			return View("Index", _sayonaraContext.Extracts);
+			return View("Index", _sayonaraContext.Extracts.Include(e => e.Facility).ToList());
 		}
 
 	}
