@@ -13,11 +13,11 @@
 				Facility
 			</th>
 			<th>
-				Extract Date
-			</th>
-			<th>
 				Type
 			</th>
+			<th>
+				Extract Date
+			</th>			
 			<th>
 				Status
 			</th>		
@@ -26,13 +26,10 @@
 	<tbody>
 		@foreach (var item in Model)
 		{
-			<tr>
+			<tr class="hoverhighlight">
 				<td>
 					@Html.DisplayFor(modelItem => item.Facility.Name)
-				</td>
-				<td>
-					@item.ExtractionDate.ToString("MMM dd yyyy")					
-				</td>
+				</td>				
 				@if (item.Format == ExtractType.CSV)
 				{
 					<td>
@@ -45,6 +42,9 @@
 						<img class="img-thumbnail" src="~/images/pdf-512.png" />
 					</td>
 				}
+				<td>
+					@item.ExtractionDate.ToString("MMM dd yyyy")
+				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.Status)
 				</td>				

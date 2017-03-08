@@ -205,6 +205,7 @@
 --resource:"C:\Repos\Sayonara\src\Sayonara\obj\Debug\netcoreapp1.0\Sayonaradotnet-compile.deps.json",Sayonara.deps.json
 C:\Repos\Sayonara\src\Sayonara\Program.cs
 C:\Repos\Sayonara\src\Sayonara\Startup.cs
+C:\Repos\Sayonara\src\Sayonara\Controllers\DocumentationViewsController.cs
 C:\Repos\Sayonara\src\Sayonara\Controllers\ExtractController.cs
 C:\Repos\Sayonara\src\Sayonara\Controllers\FacilitiesController.cs
 C:\Repos\Sayonara\src\Sayonara\Controllers\HomeController.cs

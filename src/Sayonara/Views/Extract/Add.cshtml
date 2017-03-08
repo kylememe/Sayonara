@@ -26,10 +26,12 @@
 						<input type="hidden" name="format" value="csv" />
 					</div>
 				</div>
-				<div class="control-group hidden">
+				<div id="docView" class="control-group hidden">
 					<label for="documentationview">Documentation View</label>
 					<div class="controls">
-						<select id="documentationview"></select>
+						<select id="documentationview" name="DocumentationViewID">
+							<option>-- Facility Not Selected --</option>
+						</select>
 					</div>
 				</div>
 				<div class="control-group">
@@ -54,18 +56,21 @@
 		$(function () {
 			var csvButton = $("div.controls button[type='button'].btn-primary");
 			var pdfButton = $("div.controls button[type='button'].btn-default");
+			var docViewControlGroup = $("#docView");
 			var format = $("div.controls input[name='format']");
 
 			csvButton.click(function () {
 				format.val("csv");
 				csvButton.removeClass("btn-default").addClass("btn-primary");
 				pdfButton.removeClass("btn-primary").addClass("btn-default");
+				docViewControlGroup.addClass("hidden");
 			});
 
 			pdfButton.click(function () {
 				format.val("pdf");
 				csvButton.removeClass("btn-primary").addClass("btn-default");
 				pdfButton.removeClass("btn-default").addClass("btn-primary");
+				docViewControlGroup.removeClass("hidden");
 			});
 
 			var facilities = new Bloodhound({
@@ -85,6 +90,9 @@
 
 			$('#facilitySearch').bind('typeahead:select', function (ev, suggestion) {
 				$("div.controls input[name='facilityID']").val(suggestion.id);
+				$.getJSON('/api/DocumentationViews?FacilityID=' + suggestion.id, function () {
+					console.log('loaded views');
+				});
 			});
 
 		});
