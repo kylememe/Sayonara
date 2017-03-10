@@ -55,4 +55,6 @@ div.defaultform div.control-group{
     border: none;
 }
 
-
+.tt-suggestion:hover {
+    cursor: default;
+}

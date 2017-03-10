@@ -90,8 +90,18 @@
 
 			$('#facilitySearch').bind('typeahead:select', function (ev, suggestion) {
 				$("div.controls input[name='facilityID']").val(suggestion.id);
-				$.getJSON('/api/DocumentationViews?FacilityID=' + suggestion.id, function () {
-					console.log('loaded views');
+				$.getJSON('/api/DocumentationViews?FacilityID=' + suggestion.id, function (data) {
+					var html = '';
+					var len = data.length;
+					var $ddlDocViews = $('#documentationview');
+					$ddlDocViews.find('option').remove();
+					for (var i = 0; i < len; i++) {
+						if(data[i].medicalRecordCopy)
+							html += '<option value="' + data[i].id + '">' + data[i].name + ' (MRC)</option>';
+						else
+							html += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+					}
+					$ddlDocViews.append(html);
 				});
 			});
 

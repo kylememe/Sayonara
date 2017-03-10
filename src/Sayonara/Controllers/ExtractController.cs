@@ -19,7 +19,7 @@ namespace Sayonara.Controllers
 				
 		public async Task<IActionResult> Index()
 		{
-			return View(await _sayonaraContext.Extracts.Include(e => e.Facility).ToListAsync());
+			return View(await _sayonaraContext.Extracts.Include(e => e.Facility).Include(v => v.DocumentationView).ToListAsync());
 		}
 
 		public IActionResult Add()
@@ -29,17 +29,18 @@ namespace Sayonara.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Save([Bind("Format", "FacilityID", "ExtractionDate")]Extract extract)
+		public ActionResult Save([Bind("Format", "FacilityID", "ExtractionDate", "DocumentationViewID")]Extract extract)
 		{
 			_sayonaraContext.Extracts.Add(new Extract
 			{
 				FacilityID = extract.FacilityID,
 				ExtractionDate = extract.ExtractionDate,
-				Format = extract.Format
+				Format = extract.Format,
+				DocumentationViewID = extract.DocumentationViewID
 			});
 
 			_sayonaraContext.SaveChanges();
-			return View("Index", _sayonaraContext.Extracts.Include(e => e.Facility).ToList());
+			return View("Index", _sayonaraContext.Extracts.Include(e => e.Facility).ThenInclude(f => f.DocumentationViews).ToList());
 		}
 
 	}

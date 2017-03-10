@@ -23,23 +23,12 @@ namespace Sayonara.Controllers
 		// GET: api/values
 		[HttpGet]
 		public async Task<IActionResult> Get(int facilityID)
-		{			
+		{
 			var facility = await _sayonaraContext.Facilities.Include("DocumentationViews")
 				.Where(f => f.ID == facilityID)
-				.SingleAsync();
+				.SingleAsync();						
 
-			var views = new List<DocumentationView>();
-
-			foreach (var view in facility.DocumentationViews)
-				views.Add(new DocumentationView()
-				{
-					ID = view.ID,
-					FacilityID = view.FacilityID,
-					MedicalRecordCopy = view.MedicalRecordCopy,
-					Name = view.Name
-				});						
-
-			return Ok(views);
+			return Ok(facility.DocumentationViews.Select(view => new { view.ID, view.MedicalRecordCopy, view.Name }));
 		}
 
 	}

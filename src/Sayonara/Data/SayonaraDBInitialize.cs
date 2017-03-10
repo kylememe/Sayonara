@@ -32,19 +32,51 @@ namespace Sayonara.Data
 								Alias = "Ryan's Facility"
 							}
 						);
-						context.SaveChanges();						
+						context.SaveChanges();
+						context.DocumentationViews.AddRange(
+							new DocumentationView()
+							{
+								ID = 1,
+								MedicalRecordCopy = true,
+								FacilityID = 1,
+								Name = "PA Documents"
+							},
+							new DocumentationView()
+							{
+								ID = 2,
+								MedicalRecordCopy = false,
+								FacilityID = 1,
+								Name = "MD Documents"
+							},
+							new DocumentationView()
+							{
+								ID = 3,
+								MedicalRecordCopy = false,
+								FacilityID = 1,
+								Name = "All Documents"
+							},
+							new DocumentationView()
+							{
+								ID = 4,
+								MedicalRecordCopy = true,
+								FacilityID = 2, 
+								Name = "Clincian Docs"
+							}
+						);
+						context.SaveChanges();				
 						context.Extracts.AddRange(
 							new Extract()
 							{								
-								FacilityID = 1,
+								FacilityID = 2,
 								ExtractionDate = Convert.ToDateTime("3/1/2017"),
 								Format = ExtractType.CSV
 							},
 							new Extract()
 							{								
-								FacilityID = 2,
+								FacilityID = 1,
 								ExtractionDate = Convert.ToDateTime("2/23/2017"),
-								Format = ExtractType.PDF
+								Format = ExtractType.PDF,
+								DocumentationViewID = 1
 							}
 						);
 						context.SaveChanges();

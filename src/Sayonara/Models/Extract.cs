@@ -15,7 +15,7 @@ namespace Sayonara.Models
 		public int ID { get; set; }
 		public ExtractType Format { get; set; }
 		public int FacilityID { get; set; }
-		public int DocumentationViewID { get; set; }
+		public int? DocumentationViewID { get; set; }
 		public DateTime ExtractionDate { get; set; }
 		public DateTime CompletionDate { get; set; }
 		public DateTime ShippedDate { get; set; }
@@ -27,5 +27,8 @@ namespace Sayonara.Models
 		public string FilePath { get; set; }
 
 		public Facility Facility { get; set; }
+
+		public DocumentationView DocumentationView { get; set; }
+				
 	}
 }
