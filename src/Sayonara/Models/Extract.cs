@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Sayonara.Models
 {
@@ -10,12 +12,15 @@ namespace Sayonara.Models
 		PDF
 	}
 
-	public class Extract
+	public class Extract 
 	{
 		public int ID { get; set; }
 		public ExtractType Format { get; set; }
 		public int FacilityID { get; set; }
 		public int? DocumentationViewID { get; set; }
+
+		[Required]
+		[DataType(DataType.Date)]
 		public DateTime ExtractionDate { get; set; }
 		public DateTime CompletionDate { get; set; }
 		public DateTime ShippedDate { get; set; }
@@ -28,7 +33,6 @@ namespace Sayonara.Models
 
 		public Facility Facility { get; set; }
 
-		public DocumentationView DocumentationView { get; set; }
-				
+		public DocumentationView DocumentationView { get; set; }		
 	}
 }

@@ -7,8 +7,12 @@
     <form asp-controller="Extract" asp-action="Save" class="form-horizontal">
 			<fieldset>
 				<legend>
-					New Extract					
+					New Extract
 				</legend>
+				@if(ViewBag.ErrorMessage != null)
+				{
+					<div class="text-danger">@ViewBag.ErrorMessage</div>
+				}
 				<div class="control-group">
 					<label for="facilityID">Facility</label>
 					<div class="controls">

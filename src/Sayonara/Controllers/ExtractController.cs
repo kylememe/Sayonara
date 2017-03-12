@@ -31,16 +31,41 @@ namespace Sayonara.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Save([Bind("Format", "FacilityID", "ExtractionDate", "DocumentationViewID")]Extract extract)
 		{
-			_sayonaraContext.Extracts.Add(new Extract
+			if (ModelState.IsValid)
 			{
-				FacilityID = extract.FacilityID,
-				ExtractionDate = extract.ExtractionDate,
-				Format = extract.Format,
-				DocumentationViewID = extract.DocumentationViewID
-			});
+				_sayonaraContext.Extracts.Add(new Extract
+				{
+					FacilityID = extract.FacilityID,
+					ExtractionDate = extract.ExtractionDate,
+					Format = extract.Format,
+					DocumentationViewID = extract.DocumentationViewID,
+					Status = "Waiting to start...",
+					TotalCount = 0,
+					CurrentCount = 0,
+				});
 
-			_sayonaraContext.SaveChanges();
-			return View("Index", _sayonaraContext.Extracts.Include(e => e.Facility).ThenInclude(f => f.DocumentationViews).ToList());
+				_sayonaraContext.SaveChanges();
+
+				return View("Index", _sayonaraContext.Extracts.Include(e => e.Facility).ThenInclude(f => f.DocumentationViews).ToList());
+			}
+			else
+			{
+				if (extract.FacilityID == 0)
+				{
+					ViewBag.ErrorMessage = "A Facility needs to be chosen";
+					return View("Add");
+				}
+				if (extract.ExtractionDate <= System.DateTime.Now)
+				{
+					ViewBag.ErrorMessage = "Extraction date needs to be chosen and in the future.";
+					return View("Add");
+				}
+
+				ViewBag.ErrorMessage = "An unknown problem with your selections occured.";
+				return View("Add");
+
+			}
+			
 		}
 
 	}
