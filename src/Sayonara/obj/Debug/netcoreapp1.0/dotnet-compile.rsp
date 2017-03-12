@@ -217,6 +217,8 @@ C:\Repos\Sayonara\src\Sayonara\Migrations\20170217033541_AddFacilityEntity.cs
 C:\Repos\Sayonara\src\Sayonara\Migrations\20170217033541_AddFacilityEntity.Designer.cs
 C:\Repos\Sayonara\src\Sayonara\Migrations\20170217034600_AddDocumentationViewEntity.cs
 C:\Repos\Sayonara\src\Sayonara\Migrations\20170217034600_AddDocumentationViewEntity.Designer.cs
+C:\Repos\Sayonara\src\Sayonara\Migrations\20170312024611_AddPublicID.cs
+C:\Repos\Sayonara\src\Sayonara\Migrations\20170312024611_AddPublicID.Designer.cs
 C:\Repos\Sayonara\src\Sayonara\Migrations\SayonaraContextModelSnapshot.cs
 C:\Repos\Sayonara\src\Sayonara\Models\DocumentationView.cs
 C:\Repos\Sayonara\src\Sayonara\Models\Extract.cs

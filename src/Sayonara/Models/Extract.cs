@@ -15,6 +15,8 @@ namespace Sayonara.Models
 	public class Extract 
 	{
 		public int ID { get; set; }
+
+		public Guid PublicID { get; set; }
 		public ExtractType Format { get; set; }
 		public int FacilityID { get; set; }
 		public int? DocumentationViewID { get; set; }

@@ -19,7 +19,11 @@ namespace Sayonara.Controllers
 				
 		public async Task<IActionResult> Index()
 		{
-			return View(await _sayonaraContext.Extracts.Include(e => e.Facility).Include(v => v.DocumentationView).ToListAsync());
+			return View(await _sayonaraContext.Extracts
+				.Include(e => e.Facility)
+				.Include(v => v.DocumentationView)
+				.OrderByDescending(v => v.ExtractionDate).
+				ToListAsync());
 		}
 
 		public IActionResult Add()
@@ -35,18 +39,23 @@ namespace Sayonara.Controllers
 			{
 				_sayonaraContext.Extracts.Add(new Extract
 				{
+					PublicID = System.Guid.NewGuid(),
 					FacilityID = extract.FacilityID,
 					ExtractionDate = extract.ExtractionDate,
 					Format = extract.Format,
 					DocumentationViewID = extract.DocumentationViewID,
 					Status = "Waiting to start...",
 					TotalCount = 0,
-					CurrentCount = 0,
+					CurrentCount = 0
 				});
 
 				_sayonaraContext.SaveChanges();
 
-				return View("Index", _sayonaraContext.Extracts.Include(e => e.Facility).ThenInclude(f => f.DocumentationViews).ToList());
+				return View("Index", _sayonaraContext.Extracts
+					.Include(e => e.Facility)
+					.ThenInclude(f => f.DocumentationViews)
+					.OrderByDescending(e => e.ExtractionDate)
+					.ToList());
 			}
 			else
 			{
