@@ -41,13 +41,14 @@
 				<div class="control-group">
 					<label for="extractiondate">Extract Date</label>
 					<div class="controls">
-						<input type="date" name="extractiondate" />
+						<input type="date" id ="extractiondate" name="extractiondate" />
 					</div>
 				</div>
 				<div class="control-group">
 					<div class="controls">
 						<button type="submit" class="btn btn-primary">Submit</button>
 						<a asp-controller="Home" asp-action="index" class="btn btn-default" role="button">Cancel</a>
+						<a id="btnTest" class="btn btn-default">Test</a>
 					</div>
 				</div>
 			</fieldset>
@@ -108,6 +109,16 @@
 					$ddlDocViews.append(html);
 				});
 			});
+
+			$('#btnTest').click(function () {
+				var result
+				if(format.val() == 'csv')
+					result = $.getJSON('/api/Extract/CSV/Next?scheduledDate=' + encodeURI($('#extractiondate').val()));
+				else
+					result = $.getJSON('/api/Extract/PDF/Next?scheduledDate=' + encodeURI($('#extractiondate').val()));
+
+				console.log(result);
+			})
 
 		});
 	</script>

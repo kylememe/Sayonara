@@ -11,6 +11,7 @@ namespace Sayonara.Controllers
 {
 	public class ExtractController : Controller
 	{
+		private string notStartedStatus = "Waiting to Start...";
 		private Sayonara.Data.SayonaraContext _sayonaraContext;
 		public ExtractController(Sayonara.Data.SayonaraContext context)
 		{
@@ -24,6 +25,57 @@ namespace Sayonara.Controllers
 				.Include(v => v.DocumentationView)
 				.OrderByDescending(v => v.ExtractionDate).
 				ToListAsync());
+		}
+
+		[Route("api/Extract/CSV/Next")]
+		public async Task<IActionResult> NextCSVExtract(System.DateTime scheduledDate)
+		{
+			var nextExtract = await _sayonaraContext.Extracts
+				.Where(e => e.Format == ExtractType.CSV && e.ExtractionDate <= scheduledDate && e.Status == notStartedStatus)
+				.OrderBy(e => e.ExtractionDate)
+				.FirstOrDefaultAsync();
+
+			var newPassword = new Utilities.PasswordGenerator();
+
+			if (nextExtract != null)
+			{
+				return Ok(new
+				{
+					ExtractID = nextExtract.PublicID,
+					FacilityID = nextExtract.FacilityID,
+					password = newPassword.Password
+				});
+			}
+			else
+			{
+				return StatusCode(404);
+			}				
+		}
+
+		[Route("api/Extract/PDF/Next")]
+		public async Task<IActionResult> NextPDFExtract(System.DateTime scheduledDate)
+		{
+			var nextExtract = await _sayonaraContext.Extracts
+				.Where(e => e.Format == ExtractType.PDF && e.ExtractionDate <= scheduledDate && e.Status == notStartedStatus)
+				.OrderBy(e => e.ExtractionDate)
+				.FirstOrDefaultAsync();
+
+			var newPassword = new Utilities.PasswordGenerator();
+
+			if (nextExtract != null)
+			{
+				return Ok(new
+				{
+					ExtractID = nextExtract.PublicID,
+					FacilityID = nextExtract.FacilityID,
+					password = newPassword.Password,
+					DocumentationViewID = nextExtract.DocumentationViewID
+				});
+			}
+			else
+			{
+				return StatusCode(404);
+			}
 		}
 
 		public IActionResult Add()
@@ -44,7 +96,7 @@ namespace Sayonara.Controllers
 					ExtractionDate = extract.ExtractionDate,
 					Format = extract.Format,
 					DocumentationViewID = extract.DocumentationViewID,
-					Status = "Waiting to start...",
+					Status = notStartedStatus,
 					TotalCount = 0,
 					CurrentCount = 0
 				});
@@ -75,6 +127,30 @@ namespace Sayonara.Controllers
 
 			}
 			
+		}
+
+		[HttpPut]
+		[Route("api/Extract/Status")]
+		public async Task<IActionResult> Status(Sayonara.ViewModels.ExtractStatus status)
+		{
+			var extract = await _sayonaraContext.Extracts.SingleOrDefaultAsync(e => e.PublicID.Equals(status.PublicID));
+
+			if (extract == null)
+			{
+				return StatusCode(404);
+			}
+			else
+			{
+				if(extract.CompletionDate == null)
+				{
+					extract.CurrentCount = status.CurrentCount;
+					extract.TotalCount = status.TotalCount;
+					extract.Status = status.Status;
+					await _sayonaraContext.SaveChangesAsync();
+				}
+
+				return Ok();
+			}				
 		}
 
 	}

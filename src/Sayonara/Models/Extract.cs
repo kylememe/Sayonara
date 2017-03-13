@@ -15,18 +15,16 @@ namespace Sayonara.Models
 	public class Extract 
 	{
 		public int ID { get; set; }
-
 		public Guid PublicID { get; set; }
 		public ExtractType Format { get; set; }
 		public int FacilityID { get; set; }
 		public int? DocumentationViewID { get; set; }
-
 		[Required]
 		[DataType(DataType.Date)]
 		public DateTime ExtractionDate { get; set; }
-		public DateTime CompletionDate { get; set; }
-		public DateTime ShippedDate { get; set; }
-		public DateTime ReceivedDate { get; set; }
+		public DateTime? CompletionDate { get; set; }
+		public DateTime? ShippedDate { get; set; }
+		public DateTime? ReceivedDate { get; set; }
 		public string CreatedBy { get; set; }
 		public int CurrentCount { get; set; }
 		public int TotalCount { get; set; }

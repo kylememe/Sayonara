@@ -8,9 +8,10 @@ using Sayonara.Data;
 namespace Sayonara.Migrations
 {
     [DbContext(typeof(SayonaraContext))]
-    partial class SayonaraContextModelSnapshot : ModelSnapshot
+    [Migration("20170313022253_ExtractNullableDates")]
+    partial class ExtractNullableDates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
