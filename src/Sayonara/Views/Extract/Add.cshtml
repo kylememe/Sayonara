@@ -110,16 +110,47 @@
 				});
 			});
 
-			$('#btnTest').click(function () {
-				var result
-				if(format.val() == 'csv')
-					result = $.getJSON('/api/Extract/CSV/Next?scheduledDate=' + encodeURI($('#extractiondate').val()));
-				else
-					result = $.getJSON('/api/Extract/PDF/Next?scheduledDate=' + encodeURI($('#extractiondate').val()));
+			var currentCount = 0;
 
-				console.log(result);
-			})
+			$('#btnTest').click(function () {
+				if (extractToUpdate == null)
+				{
+					if (format.val() == 'csv')
+						$.getJSON('/api/Extract/CSV/Next?scheduledDate=' + encodeURI($('#extractiondate').val()))
+							.done(function (data) {
+								TryUpdate(data.extractID);
+							});
+					else
+						$.getJSON('/api/Extract/PDF/Next?scheduledDate=' + encodeURI($('#extractiondate').val()))
+							.done(function (data) {
+								TryUpdate(data.extractID);
+							});
+				}
+				else
+				{
+					TryUpdate(extractToUpdate);
+				}
+			});			
 
 		});
+
+		var currentCount = 0;
+		var extractToUpdate = null;
+
+		function TryUpdate(extractID) {
+			console.log(extractID);
+			extractToUpdate = extractID;			
+
+			currentCount++;
+			
+			$.ajax({
+				url: '/api/Extract/Status',
+				type: 'PUT',
+				data: { PublicID: extractID, TotalCount: 100, CurrentCount: currentCount, Status: 'Working' },				
+				success: function (response) {
+					console.log('Extract updated');
+				}
+			});			
+		}
 	</script>
 }

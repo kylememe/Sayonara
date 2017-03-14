@@ -69,14 +69,16 @@ namespace Sayonara.Data
 							{								
 								FacilityID = 2,
 								ExtractionDate = Convert.ToDateTime("3/1/2017"),
-								Format = ExtractType.CSV
+								Format = ExtractType.CSV,
+								PublicID = System.Guid.NewGuid()
 							},
 							new Extract()
 							{								
 								FacilityID = 1,
 								ExtractionDate = Convert.ToDateTime("2/23/2017"),
 								Format = ExtractType.PDF,
-								DocumentationViewID = 1
+								DocumentationViewID = 1,
+								PublicID = System.Guid.NewGuid()
 							}
 						);
 						context.SaveChanges();

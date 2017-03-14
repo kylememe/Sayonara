@@ -17,7 +17,12 @@ namespace Sayonara.Controllers
 		{
 			_sayonaraContext = context;
 		}
-				
+
+		public IActionResult Add()
+		{
+			return View();
+		}
+
 		public async Task<IActionResult> Index()
 		{
 			return View(await _sayonaraContext.Extracts
@@ -76,12 +81,7 @@ namespace Sayonara.Controllers
 			{
 				return StatusCode(404);
 			}
-		}
-
-		public IActionResult Add()
-		{
-			return View();
-		}
+		}		
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
@@ -124,32 +124,29 @@ namespace Sayonara.Controllers
 
 				ViewBag.ErrorMessage = "An unknown problem with your selections occured.";
 				return View("Add");
-
-			}
-			
+			}			
 		}
 
 		[HttpPut]
 		[Route("api/Extract/Status")]
-		public async Task<IActionResult> Status(Sayonara.ViewModels.ExtractStatus status)
+		public async Task<IActionResult> Status(Sayonara.ViewModels.ExtractStatus dto)
 		{
-			var extract = await _sayonaraContext.Extracts.SingleOrDefaultAsync(e => e.PublicID.Equals(status.PublicID));
+			var extract = await _sayonaraContext.Extracts.SingleOrDefaultAsync(e => e.PublicID.Equals(new System.Guid(dto.PublicID)));
 
-			if (extract == null)
+			if (extract != null)
 			{
-				return StatusCode(404);
+				if (extract.CompletionDate == null)
+				{
+					extract.CurrentCount = dto.CurrentCount;
+					extract.TotalCount = dto.TotalCount;
+					extract.Status = dto.Status;
+					await _sayonaraContext.SaveChangesAsync();
+				}
+				return Ok();				
 			}
 			else
 			{
-				if(extract.CompletionDate == null)
-				{
-					extract.CurrentCount = status.CurrentCount;
-					extract.TotalCount = status.TotalCount;
-					extract.Status = status.Status;
-					await _sayonaraContext.SaveChangesAsync();
-				}
-
-				return Ok();
+				return StatusCode(404);
 			}				
 		}
 
