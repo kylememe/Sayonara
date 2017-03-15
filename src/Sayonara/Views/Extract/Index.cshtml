@@ -48,6 +48,8 @@
 					@item.ExtractionDate.ToString("MMM dd yyyy")
 				</td>
 				<td>
+					<progress value="@item.CurrentCount" max="@item.TotalCount"></progress>
+					<br />
 					@Html.DisplayFor(modelItem => item.Status)
 				</td>				
 			</tr>

@@ -13,8 +13,7 @@ namespace Sayonara.Migrations
                 name: "DocumentationView",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ID = table.Column<int>(nullable: false),                        
                     FacilityID = table.Column<int>(nullable: false),
                     MedicalRecordCopy = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true)

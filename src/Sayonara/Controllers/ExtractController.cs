@@ -10,8 +10,7 @@ using Sayonara.Models;
 namespace Sayonara.Controllers
 {
 	public class ExtractController : Controller
-	{
-		private string notStartedStatus = "Waiting to Start...";
+	{		
 		private Sayonara.Data.SayonaraContext _sayonaraContext;
 		public ExtractController(Sayonara.Data.SayonaraContext context)
 		{
@@ -36,7 +35,7 @@ namespace Sayonara.Controllers
 		public async Task<IActionResult> NextCSVExtract(System.DateTime scheduledDate)
 		{
 			var nextExtract = await _sayonaraContext.Extracts
-				.Where(e => e.Format == ExtractType.CSV && e.ExtractionDate <= scheduledDate && e.Status == notStartedStatus)
+				.Where(e => e.Format == ExtractType.CSV && e.ExtractionDate <= scheduledDate && e.Status == Extract.NotStartedStatus)
 				.OrderBy(e => e.ExtractionDate)
 				.FirstOrDefaultAsync();
 
@@ -61,7 +60,7 @@ namespace Sayonara.Controllers
 		public async Task<IActionResult> NextPDFExtract(System.DateTime scheduledDate)
 		{
 			var nextExtract = await _sayonaraContext.Extracts
-				.Where(e => e.Format == ExtractType.PDF && e.ExtractionDate <= scheduledDate && e.Status == notStartedStatus)
+				.Where(e => e.Format == ExtractType.PDF && e.ExtractionDate <= scheduledDate && e.Status == Extract.NotStartedStatus)
 				.OrderBy(e => e.ExtractionDate)
 				.FirstOrDefaultAsync();
 
@@ -96,7 +95,7 @@ namespace Sayonara.Controllers
 					ExtractionDate = extract.ExtractionDate,
 					Format = extract.Format,
 					DocumentationViewID = extract.DocumentationViewID,
-					Status = notStartedStatus,
+					Status = Extract.NotStartedStatus,
 					TotalCount = 0,
 					CurrentCount = 0
 				});

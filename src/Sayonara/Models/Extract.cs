@@ -12,8 +12,10 @@ namespace Sayonara.Models
 		PDF
 	}
 
-	public class Extract 
+	public class Extract : IValidatableObject
 	{
+		public static string NotStartedStatus = "Waiting to Start...";
+
 		public int ID { get; set; }
 		public Guid PublicID { get; set; }
 		public ExtractType Format { get; set; }
@@ -33,6 +35,18 @@ namespace Sayonara.Models
 
 		public Facility Facility { get; set; }
 
-		public DocumentationView DocumentationView { get; set; }		
+		public DocumentationView DocumentationView { get; set; }
+
+		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+		{
+			var results = new List<ValidationResult>();
+			if (ExtractionDate < DateTime.Today)
+			{
+				var msg = new ValidationResult("Expire date must be greater than or equal to Today");
+				results.Add(msg);
+
+			}
+			return results;
+		}
 	}
 }
