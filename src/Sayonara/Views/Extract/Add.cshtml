@@ -47,8 +47,7 @@
 				<div class="control-group">
 					<div class="controls">
 						<button type="submit" class="btn btn-primary">Submit</button>
-						<a asp-controller="Home" asp-action="index" class="btn btn-default" role="button">Cancel</a>
-						<a id="btnTest" class="btn btn-default">Test</a>
+						<a asp-controller="Home" asp-action="index" class="btn btn-default" role="button">Cancel</a>						
 					</div>
 				</div>
 			</fieldset>
@@ -108,49 +107,9 @@
 					}
 					$ddlDocViews.append(html);
 				});
-			});
+			});					
 
-			var currentCount = 0;
+		});	
 
-			$('#btnTest').click(function () {
-				if (extractToUpdate == null)
-				{
-					if (format.val() == 'csv')
-						$.getJSON('/api/Extract/CSV/Next?scheduledDate=' + encodeURI($('#extractiondate').val()))
-							.done(function (data) {
-								TryUpdate(data.extractID);
-							});
-					else
-						$.getJSON('/api/Extract/PDF/Next?scheduledDate=' + encodeURI($('#extractiondate').val()))
-							.done(function (data) {
-								TryUpdate(data.extractID);
-							});
-				}
-				else
-				{
-					TryUpdate(extractToUpdate);
-				}
-			});			
-
-		});
-
-		var currentCount = 0;
-		var extractToUpdate = null;
-
-		function TryUpdate(extractID) {
-			console.log(extractID);
-			extractToUpdate = extractID;			
-
-			currentCount++;
-			
-			$.ajax({
-				url: '/api/Extract/Status',
-				type: 'PUT',
-				data: { PublicID: extractID, TotalCount: 100, CurrentCount: currentCount, Status: 'Working' },				
-				success: function (response) {
-					console.log('Extract updated');
-				}
-			});			
-		}
 	</script>
 }

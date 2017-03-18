@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Sayonara.Models;
+using Microsoft.Extensions.Logging;
+using System;
+using System.IO;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,9 +15,11 @@ namespace Sayonara.Controllers
 	public class ExtractController : Controller
 	{		
 		private Sayonara.Data.SayonaraContext _sayonaraContext;
-		public ExtractController(Sayonara.Data.SayonaraContext context)
+		private ILogger _logger;
+		public ExtractController(Sayonara.Data.SayonaraContext context, ILogger<ExtractController> logger)
 		{
 			_sayonaraContext = context;
+			_logger = logger;
 		}
 
 		public IActionResult Add()
@@ -45,7 +50,7 @@ namespace Sayonara.Controllers
 			{
 				return Ok(new
 				{
-					ExtractID = nextExtract.PublicID,
+					PublicID = nextExtract.PublicID,
 					FacilityID = nextExtract.FacilityID,
 					password = newPassword.Password
 				});
@@ -70,7 +75,7 @@ namespace Sayonara.Controllers
 			{
 				return Ok(new
 				{
-					ExtractID = nextExtract.PublicID,
+					PublicID = nextExtract.PublicID,
 					FacilityID = nextExtract.FacilityID,
 					password = newPassword.Password,
 					DocumentationViewID = nextExtract.DocumentationViewID
@@ -128,8 +133,15 @@ namespace Sayonara.Controllers
 
 		[HttpPut]
 		[Route("api/Extract/Status")]
-		public async Task<IActionResult> Status(Sayonara.ViewModels.ExtractStatus dto)
+		public async Task<IActionResult> Status([FromBody]Sayonara.ViewModels.ExtractStatus dto)
 		{
+			_logger.LogInformation("PublicID" + dto.PublicID);
+			_logger.LogInformation("TotalCount" + dto.TotalCount);
+			_logger.LogInformation("Status" + dto.Status);			
+
+			if (String.IsNullOrEmpty(dto.PublicID))
+				return StatusCode(404);			
+			
 			var extract = await _sayonaraContext.Extracts.SingleOrDefaultAsync(e => e.PublicID.Equals(new System.Guid(dto.PublicID)));
 
 			if (extract != null)
@@ -146,7 +158,7 @@ namespace Sayonara.Controllers
 			else
 			{
 				return StatusCode(404);
-			}				
+			}			
 		}
 
 	}
