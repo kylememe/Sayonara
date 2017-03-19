@@ -32,8 +32,7 @@ a, a:link, a:visited, a:hover, a:active {
 }
 
 div.highlighted, tr.highlighted{
-  background-color: whitesmoke;    
-  cursor: pointer;
+  background-color: whitesmoke;      
 }
 
 .defaultform {    	
@@ -57,4 +56,17 @@ div.defaultform div.control-group{
 
 .tt-suggestion:hover {
     cursor: default;
+}
+
+.glyphicon.glyphicon-ban-circle {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+tr.hoverhighlight span.glyphicon{
+    visibility:hidden;
+}
+
+tr.highlighted span.glyphicon{
+    visibility:visible;
 }

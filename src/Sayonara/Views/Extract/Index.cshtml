@@ -17,10 +17,11 @@
 			</th>
 			<th>
 				Extract Date
-			</th>			
+			</th>
 			<th>
 				Status
-			</th>		
+			</th>
+			<th>&nbsp;</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -51,10 +52,40 @@
 					<progress value="@item.CurrentCount" max="@item.TotalCount"></progress>
 					<br />
 					@Html.DisplayFor(modelItem => item.Status)
-				</td>				
+				</td>
+				<td>
+					@if (item.CompletionDate == null)
+					{
+						<span class="glyphicon glyphicon-ban-circle" aria-hidden="true" data-publicID="@item.PublicID"></span>
+					}
+					else
+					{
+						<span>&nbsp;</span>
+					}
+				</td>
+
 			</tr>
 		}
 	</tbody>
 </table>
 
+@section scripts
+{
+	<script type="text/javascript">
+		$(function () {
+			$('span.glyphicon-ban-circle').click(function () {
+				var $spn = $(this);
+				var publicID = $spn.attr('data-publicID');
+
+				var result = confirm("Are you sure you want to remove this extract?");
+				if (result)
+					$.post('/api/Extract/Delete', { PublicID: publicID }, function () {						
+						$spn.parent().parent().remove();
+					});
+			});
+
+		});
+
+	</script>
+}
 

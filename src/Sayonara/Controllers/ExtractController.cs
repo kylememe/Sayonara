@@ -131,14 +131,33 @@ namespace Sayonara.Controllers
 			}			
 		}
 
+		[HttpPost]		
+		[Route("api/Extract/Delete")]
+		public async Task<IActionResult> Delete(string PublicID)
+		{
+			if (String.IsNullOrEmpty(PublicID))
+				return StatusCode(404);
+
+			var extract = await _sayonaraContext.Extracts
+				.AsNoTracking()
+				.SingleOrDefaultAsync(e => e.PublicID.Equals(new System.Guid(PublicID)));
+
+			if (extract != null)
+			{
+				_sayonaraContext.Extracts.Remove(extract);
+				await _sayonaraContext.SaveChangesAsync();
+				return Ok();
+			}
+			else
+			{
+				return StatusCode(404);
+			}
+		}
+
 		[HttpPut]
 		[Route("api/Extract/Status")]
 		public async Task<IActionResult> Status([FromBody]Sayonara.ViewModels.ExtractStatus dto)
 		{
-			_logger.LogInformation("PublicID" + dto.PublicID);
-			_logger.LogInformation("TotalCount" + dto.TotalCount);
-			_logger.LogInformation("Status" + dto.Status);			
-
 			if (String.IsNullOrEmpty(dto.PublicID))
 				return StatusCode(404);			
 			
