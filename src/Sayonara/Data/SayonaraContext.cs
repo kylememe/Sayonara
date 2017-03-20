@@ -10,9 +10,7 @@ namespace Sayonara.Data
 		}
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			base.OnModelCreating(modelBuilder);
-			
-			//modelBuilder.Entity<Extract>().HasOne<>
+			base.OnModelCreating(modelBuilder);			
     }    
 		public DbSet<Extract> Extracts { get; set; }		
 
