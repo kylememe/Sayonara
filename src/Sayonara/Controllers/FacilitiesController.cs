@@ -8,8 +8,7 @@ using Sayonara.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Sayonara.Controllers
-{
-	[Route("api/[controller]")]
+{	
 	public class FacilitiesController : Controller
 	{
 		private Sayonara.Data.SayonaraContext _sayonaraContext;
@@ -23,6 +22,7 @@ namespace Sayonara.Controllers
 
 		// GET: api/values
 		[HttpGet]
+		[Route("api/Facilities")]
 		public async Task<IActionResult> Get(string query)
 		{
 			var facilities = await _sayonaraContext.Facilities
@@ -33,9 +33,10 @@ namespace Sayonara.Controllers
 			return Ok(facilities);
 		}
 
-		public async Task<IActionResult> Seed(ICollection<Facility> facilities)
+		[HttpPost]
+		[Route("api/Facilities/Seed")]
+		public async Task<IActionResult> Seed([FromBody]ICollection<Facility> facilities)
 		{
-
 			_logger.LogInformation("Facility Count" + facilities.Count);
 
 			await _sayonaraContext.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE Facilities");			

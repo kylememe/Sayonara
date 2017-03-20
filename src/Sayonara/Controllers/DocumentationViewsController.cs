@@ -10,8 +10,7 @@ using Microsoft.Extensions.Logging;
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Sayonara.Controllers
-{
-	[Route("api/[controller]")]
+{	
 	public class DocumentationViewsController : Controller
 	{
 		private Sayonara.Data.SayonaraContext _sayonaraContext;
@@ -25,6 +24,7 @@ namespace Sayonara.Controllers
 
 		// GET: api/values
 		[HttpGet]
+		[Route("api/DocumentationViews")]
 		public async Task<IActionResult> Get(int facilityID)
 		{
 			var facility = await _sayonaraContext.Facilities.Include("DocumentationViews")
@@ -34,9 +34,10 @@ namespace Sayonara.Controllers
 			return Ok(facility.DocumentationViews.Select(view => new { view.ID, view.MedicalRecordCopy, view.Name }));
 		}
 
-		public async Task<IActionResult> Seed(ICollection<DocumentationView> views)
+		[HttpPost]
+		[Route("api/DocumentationViews/Seed")]
+		public async Task<IActionResult> Seed([FromBody] ICollection<DocumentationView> views)
 		{
-
 			_logger.LogInformation("Views Count" + views.Count);
 
 			await _sayonaraContext.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE DocumentationViews");
