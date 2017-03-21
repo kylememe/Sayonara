@@ -7,7 +7,7 @@ namespace Sayonara.Data
     public static class SayonaraDBInitialize
     {
 			public static void Initialize(Sayonara.Data.SayonaraContext context)
-			{						
+			{			
 				if (!context.Extracts.Any())
 				{
 					context.Facilities.AddRange(

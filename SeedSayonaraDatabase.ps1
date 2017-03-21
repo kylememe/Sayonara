@@ -6,7 +6,7 @@ $facilities = @()
 
 for($i=1; $i -le 10; $i++)
 {
-    $facilityName = 'Facility Name' + $i
+    $facilityName = 'Facility Name_' + $i
     $facilityAlias = 'Facility Alias' + $i
 
     $facility = @{

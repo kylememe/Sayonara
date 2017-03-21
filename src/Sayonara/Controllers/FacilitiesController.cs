@@ -37,18 +37,26 @@ namespace Sayonara.Controllers
 		[Route("api/Facilities/Seed")]
 		public async Task<IActionResult> Seed([FromBody]ICollection<Facility> facilities)
 		{
-			_logger.LogInformation("Facility Count" + facilities.Count);
-
-			await _sayonaraContext.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE Facilities");			
+			_logger.LogInformation("Facility Count" + facilities.Count);		
 
 			foreach(var facility in facilities)
 			{
-				_sayonaraContext.Facilities.Add(new Facility
+				var currentFacility = await _sayonaraContext.Facilities.Where(f => f.ID == facility.ID).FirstOrDefaultAsync();
+				if(currentFacility != null)
 				{
-					ID = facility.ID,
-					Alias = facility.Alias,
-					Name = facility.Name
-				});
+					currentFacility.Name = facility.Name;
+					currentFacility.Alias = facility.Alias;
+					_sayonaraContext.Facilities.Update(currentFacility);										
+				}
+				else
+				{
+					_sayonaraContext.Facilities.Add(new Facility
+					{
+						ID = facility.ID,
+						Alias = facility.Alias,
+						Name = facility.Name
+					});
+				}				
 			}
 
 			await _sayonaraContext.SaveChangesAsync();

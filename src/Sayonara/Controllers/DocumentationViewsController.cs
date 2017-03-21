@@ -40,23 +40,30 @@ namespace Sayonara.Controllers
 		{
 			_logger.LogInformation("Views Count" + views.Count);
 
-			await _sayonaraContext.Database.ExecuteSqlCommandAsync("TRUNCATE TABLE DocumentationViews");
-
 			foreach (var view in views)
 			{
-				_sayonaraContext.DocumentationViews.Add(new DocumentationView
-				{				 
-					ID = view.ID,
-					FacilityID = view.FacilityID,
-					Name = view.Name,
-					MedicalRecordCopy = view.MedicalRecordCopy					
-				});
+				var currentView = await _sayonaraContext.DocumentationViews.Where(v => v.ID == view.ID).FirstOrDefaultAsync();
+				if (currentView != null)
+				{
+					currentView.Name = view.Name;
+					currentView.MedicalRecordCopy = view.MedicalRecordCopy;
+					_sayonaraContext.DocumentationViews.Update(currentView);
+				}
+				else
+				{
+					_sayonaraContext.DocumentationViews.Add(new DocumentationView
+					{
+						ID = view.ID,
+						FacilityID = view.FacilityID,
+						Name = view.Name,
+						MedicalRecordCopy = view.MedicalRecordCopy
+					});
+				}
 			}
 
 			await _sayonaraContext.SaveChangesAsync();
 
 			return Ok();
 		}
-
 	}
 }
