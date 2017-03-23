@@ -38,8 +38,6 @@ namespace Sayonara.Controllers
 		[Route("api/DocumentationViews/Seed")]
 		public async Task<IActionResult> Seed([FromBody] ICollection<DocumentationView> views)
 		{
-			_logger.LogInformation("Views Count" + views.Count);
-
 			foreach (var view in views)
 			{
 				var currentView = await _sayonaraContext.DocumentationViews.Where(v => v.ID == view.ID).FirstOrDefaultAsync();
