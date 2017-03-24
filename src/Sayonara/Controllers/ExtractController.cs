@@ -170,6 +170,7 @@ namespace Sayonara.Controllers
 					extract.CurrentCount = dto.CurrentCount;
 					extract.TotalCount = dto.TotalCount;
 					extract.Status = dto.Status;
+					extract.CompletionDate = dto.CompletionDate;						
 					await _sayonaraContext.SaveChangesAsync();
 				}
 				return Ok();				
