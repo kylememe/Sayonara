@@ -5,10 +5,12 @@ Param(
     [string]$SqlServer,
     
     [Parameter(Mandatory=$true)]
-    [string]$Database    
+    [string]$Database,
+
+    [Parameter(Mandatory=$true)]
+    [string]$SayonaraUrl          
 )
 
-$SayonaraUrl = "http://localhost:51287"
 $SayonaraSeedFacilitiesUrl = $SayonaraUrl + "/api/Facilities/Seed"
 $SayonaraSeedDocumentationViewsUrl = $SayonaraUrl + "/api/DocumentationViews/Seed"
 
