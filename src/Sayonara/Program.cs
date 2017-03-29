@@ -14,8 +14,10 @@ namespace Sayonara
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
+								.UseSetting("detailedErrors", "true") //Helped with Azure debugging
+								.UseIISIntegration()
                 .UseStartup<Startup>()
+								.CaptureStartupErrors(true) //Helped with Azure debugging
                 .Build();
 
             host.Run();
