@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Sayonara.Models;
+using Sayonara.Utilities;
 using Microsoft.Extensions.Logging;
 
 namespace Sayonara.Controllers
@@ -27,6 +28,7 @@ namespace Sayonara.Controllers
 		{
 			var facilities = await _sayonaraContext.Facilities
 				.Where(f => f.Name.StartsWith(query))
+				.Select(f => new { Name = f.Alias + " (FacID: " + f.ID + ")", ID = f.ID, Alias = f.Alias })
 				.ToAsyncEnumerable()
 				.ToArray();
 
@@ -34,9 +36,10 @@ namespace Sayonara.Controllers
 		}
 
 		[HttpPost]
-		[Route("api/Facilities/Seed")]
+		[Route("api/Facilities/Seed")]		
 		public async Task<IActionResult> Seed([FromBody]ICollection<Facility> facilities)
 		{
+			_logger.LogInformation("In Facilities Seed with " + facilities.Count + " facilities");
 			foreach(var facility in facilities)
 			{
 				var currentFacility = await _sayonaraContext.Facilities.Where(f => f.ID == facility.ID).FirstOrDefaultAsync();

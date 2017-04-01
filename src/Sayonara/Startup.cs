@@ -41,8 +41,9 @@ namespace Sayonara
     {
       loggerFactory.AddConsole(Configuration.GetSection("Logging"));
       loggerFactory.AddDebug();
+			loggerFactory.AddAzureWebAppDiagnostics();
 
-      if (env.IsDevelopment())
+			if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
         app.UseBrowserLink();

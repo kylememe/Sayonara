@@ -1,0 +1,11 @@
+src/Sayonara/Properties/PublishProfiles/Sayonara - Web Deploy.pubxml.user
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+src/Sayonara/bin
+src/Sayonara/obj

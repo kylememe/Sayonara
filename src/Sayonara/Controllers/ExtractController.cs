@@ -39,6 +39,7 @@ namespace Sayonara.Controllers
 		[Route("api/Extract/CSV/Next")]
 		public async Task<IActionResult> NextCSVExtract(System.DateTime scheduledDate)
 		{
+			_logger.LogInformation("Trying to get next CSV Extract with scheduled date of " + scheduledDate.ToString());
 			var nextExtract = await _sayonaraContext.Extracts
 				.Where(e => e.Format == ExtractType.CSV && e.ExtractionDate <= scheduledDate && e.Status == Extract.NotStartedStatus)
 				.OrderBy(e => e.ExtractionDate)
@@ -64,6 +65,7 @@ namespace Sayonara.Controllers
 		[Route("api/Extract/PDF/Next")]
 		public async Task<IActionResult> NextPDFExtract(System.DateTime scheduledDate)
 		{
+			_logger.LogInformation("Trying to get next PDF Extract with scheduled date of " + scheduledDate.ToString());
 			var nextExtract = await _sayonaraContext.Extracts
 				.Where(e => e.Format == ExtractType.PDF && e.ExtractionDate <= scheduledDate && e.Status == Extract.NotStartedStatus)
 				.OrderBy(e => e.ExtractionDate)

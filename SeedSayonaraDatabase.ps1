@@ -65,10 +65,14 @@ $viewsTable | FOREACH-OBJECT {
     $views += $view
 }
 
-$facilitiesJSON = $facilities | ConvertTo-Json  
+$enc = [system.Text.Encoding]::UTF8
+
+$facilitiesJSON = $facilities | ConvertTo-Json
+
+$facilityJSONUTF = $enc.GetBytes($facilitiesJSON)
 
 try{
-Invoke-RestMethod $SayonaraSeedFacilitiesUrl -Method Post -Body $facilitiesJSON -ContentType 'application/json'
+Invoke-RestMethod $SayonaraSeedFacilitiesUrl -Method Post -Body $facilityJSONUTF -ContentType 'application/json;charset=utf-8'
 }
 catch{
     Write-Host "Something went wrong with the facility seed: StatusCode:" $_.Exception.Response.StatusCode.value__
@@ -76,9 +80,12 @@ catch{
 
 $viewsJSON = $views | ConvertTo-Json 
 
+$viewJSONUTF = $enc.GetBytes($viewsJSON)
+
 try{
-Invoke-RestMethod $SayonaraSeedDocumentationViewsUrl -Method Post -Body $viewsJSON -ContentType 'application/json'
+Invoke-RestMethod $SayonaraSeedDocumentationViewsUrl -Method Post -Body $viewJSONUTF -ContentType 'application/json;charset=utf-8'
 }
 catch{
     Write-Host "Something went wrong with the view seed: StatusCode:" $_.Exception.Response.StatusCode.value__
 }
+
