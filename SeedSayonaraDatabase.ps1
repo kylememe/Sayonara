@@ -18,7 +18,7 @@ $SayonaraSeedDocumentationViewsUrl = $SayonaraUrl + "/api/DocumentationViews/See
 $cn = new-object system.data.SqlClient.SqlConnection("Data Source=" + $SqlServer + ";Initial Catalog=" + $Database + ";Trusted_Connection=True;");
 
 $facilities = @()
-$facilitiesQuery = "Select FacilityID, FacilityName, FacilityAlias From tbl_Facility Where recActive = 1 And ActiveFacility = 1"
+$facilitiesQuery = "Select FacilityID, FacilityName, FacilityAlias From tbl_Facility Where ActiveFacility = 1"
 
 #Setup Facilities for JSON
 $facilitiesDS = new-object "System.Data.DataSet" "tablesToExport"
@@ -44,7 +44,7 @@ $viewsQuery = "Select DocumentationFacilityViewID, FacilityID, Name, MedicalReco
                 From tbl_DocumentationFacilityViews 
                 Where recActive = 1 
                 And FacilityID Is Not Null
-                And tbl_DocumentationFacilityViews.FacilityID In (Select FacilityID From tbl_Facility Where recActive = 1 And ActiveFacility = 1)"
+                And tbl_DocumentationFacilityViews.FacilityID In (Select FacilityID From tbl_Facility Where ActiveFacility = 1)"
 
 #Setup DocumentationViews for JSON
 $viewsDS = new-object "System.Data.DataSet" "tablesToExport"

@@ -9,3 +9,6 @@ src/Sayonara/Properties/PublishProfiles/Sayonara - Web Deploy.pubxml.user
 *.so
 src/Sayonara/bin
 src/Sayonara/obj
+src/Sayonara/bin/Debug/netcoreapp1.0/Sayonara.deps.json
+src/Sayonara/obj/Debug/netcoreapp1.0/dotnet-compile-csc.rsp
+src/Sayonara/obj/Debug/netcoreapp1.0/Sayonaradotnet-compile.deps.json
