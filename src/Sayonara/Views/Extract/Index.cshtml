@@ -29,7 +29,7 @@
 		{
 			<tr class="hoverhighlight">
 				<td>
-					@Html.DisplayFor(modelItem => item.Facility.Name)
+					@item.Facility.Alias (FacID: @item.FacilityID)					
 				</td>				
 				@if (item.Format == ExtractType.CSV)
 				{
@@ -49,7 +49,17 @@
 					@item.ExtractionDate.ToString("MMM dd yyyy")
 				</td>
 				<td>
-					<progress value="@item.CurrentCount" max="@item.TotalCount"></progress>
+					@{int percentDone;
+						if (item.TotalCount > 0)
+						{
+							percentDone = item.CurrentCount / item.TotalCount;
+						}
+						else
+						{
+							percentDone = 0;
+						}
+					}
+					<progress value="@item.CurrentCount" max="@item.TotalCount"></progress>&nbsp; @percentDone %
 					<br />
 					@Html.DisplayFor(modelItem => item.Status)
 				</td>
