@@ -9,9 +9,10 @@ using Sayonara.Models;
 namespace Sayonara.Migrations
 {
     [DbContext(typeof(SayonaraContext))]
-    partial class SayonaraContextModelSnapshot : ModelSnapshot
+    [Migration("20170407013901_AddExtractPassword")]
+    partial class AddExtractPassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")

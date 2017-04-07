@@ -32,6 +32,7 @@ namespace Sayonara.Models
 		public int TotalCount { get; set; }
 		public string Status { get; set; }
 		public string FilePath { get; set; }
+		public string Password { get; set; }
 
 		public Facility Facility { get; set; }
 
