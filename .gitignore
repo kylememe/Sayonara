@@ -26,3 +26,5 @@ src/Sayonara/bin/Debug/netcoreapp1.0/Sayonara.deps.json
 src/Sayonara/bin/Debug/netcoreapp1.0/Sayonara.pdb
 *.rsp
 src/Sayonara/obj/Debug/netcoreapp1.0/Sayonaradotnet-compile.deps.json
+src/Sayonara/bin/Debug/netcoreapp1.0/Sayonara.deps.json
+*.pdb

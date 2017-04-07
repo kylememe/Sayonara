@@ -49,17 +49,19 @@
 					@item.ExtractionDate.ToString("MMM dd yyyy")
 				</td>
 				<td>
-					@{int percentDone;
+					@{decimal percentDone;
+						int percentDoneWhole;
 						if (item.TotalCount > 0)
 						{
-							percentDone = item.CurrentCount / item.TotalCount;
+							percentDone = Decimal.Divide(item.CurrentCount, item.TotalCount);							
 						}
 						else
 						{
 							percentDone = 0;
 						}
+						percentDoneWhole = (int)(percentDone * 100);
 					}
-					<progress value="@item.CurrentCount" max="@item.TotalCount"></progress>&nbsp; @percentDone %
+					<progress value="@item.CurrentCount" max="@item.TotalCount"></progress>&nbsp; @percentDoneWhole %
 					<br />
 					@Html.DisplayFor(modelItem => item.Status)
 				</td>
