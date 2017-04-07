@@ -8,7 +8,7 @@ namespace Sayonara.Data
     {
 			public static void Initialize(Sayonara.Data.SayonaraContext context)
 			{			
-				if (!context.Extracts.Any())
+				if (!context.Facilities.Any())
 				{
 					context.Facilities.AddRange(
 						new Facility()

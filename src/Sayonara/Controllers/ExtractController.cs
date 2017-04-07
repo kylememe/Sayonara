@@ -121,9 +121,9 @@ namespace Sayonara.Controllers
 					ViewBag.ErrorMessage = "A Facility needs to be chosen";
 					return View("Add");
 				}
-				if (extract.ExtractionDate <= System.DateTime.Now)
+				if (extract.ExtractionDate <= System.DateTime.Now.AddDays(-2)) //-2 because I think the azure website deployed is an an unknow timezone
 				{
-					ViewBag.ErrorMessage = "Extraction date needs to be chosen and in the future.";
+					ViewBag.ErrorMessage = "Extraction date needs to be chosen and in the future!";
 					return View("Add");
 				}
 

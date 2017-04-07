@@ -41,9 +41,9 @@ namespace Sayonara.Models
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			var results = new List<ValidationResult>();
-			if (ExtractionDate < DateTime.Today)
+			if (ExtractionDate < DateTime.Today.AddDays(-2)) //-2 because I think the azure website deployed is an an unknow timezone
 			{
-				var msg = new ValidationResult("Expire date must be greater than or equal to Today");
+				var msg = new ValidationResult("Extraction date must be greater than or equal to Today");
 				results.Add(msg);
 
 			}
