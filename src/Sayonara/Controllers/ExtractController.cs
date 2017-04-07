@@ -53,7 +53,7 @@ namespace Sayonara.Controllers
 				{
 					PublicID = nextExtract.PublicID,
 					FacilityID = nextExtract.FacilityID,
-					password = newPassword.Password
+					password = nextExtract.Password
 				});
 			}
 			else
@@ -69,9 +69,7 @@ namespace Sayonara.Controllers
 			var nextExtract = await _sayonaraContext.Extracts
 				.Where(e => e.Format == ExtractType.PDF && e.ExtractionDate <= scheduledDate && e.Status == Extract.NotStartedStatus)
 				.OrderBy(e => e.ExtractionDate)
-				.FirstOrDefaultAsync();
-
-			var newPassword = new Utilities.PasswordGenerator();
+				.FirstOrDefaultAsync();			
 
 			if (nextExtract != null)
 			{
@@ -79,7 +77,7 @@ namespace Sayonara.Controllers
 				{
 					PublicID = nextExtract.PublicID,
 					FacilityID = nextExtract.FacilityID,
-					password = newPassword.Password,
+					password = nextExtract.Password,
 					DocumentationViewID = nextExtract.DocumentationViewID
 				});
 			}
@@ -94,7 +92,7 @@ namespace Sayonara.Controllers
 		public ActionResult Save([Bind("Format", "FacilityID", "ExtractionDate", "DocumentationViewID")]Extract extract)
 		{
 			if (ModelState.IsValid)
-			{
+			{				
 				_sayonaraContext.Extracts.Add(new Extract
 				{
 					PublicID = System.Guid.NewGuid(),
@@ -104,7 +102,8 @@ namespace Sayonara.Controllers
 					DocumentationViewID = extract.DocumentationViewID,
 					Status = Extract.NotStartedStatus,
 					TotalCount = 0,
-					CurrentCount = 0
+					CurrentCount = 0,
+					Password = Utilities.PasswordGenerator.Generate(12)
 				});
 
 				_sayonaraContext.SaveChanges();
