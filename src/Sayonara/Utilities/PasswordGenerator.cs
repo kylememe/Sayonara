@@ -17,7 +17,7 @@ namespace Sayonara.Utilities
 			for (int i = 0; i < passwordLength - 1; i++)			
 				chars[i] = allowedChars[rd.Next(0, allowedChars.Length)];
 
-			chars[passwordLength - 2] = specialChars[rd.Next(0, specialChars.Length)];
+			chars[passwordLength - 1] = specialChars[rd.Next(0, specialChars.Length)];
 
 			return new string(chars);
 		}

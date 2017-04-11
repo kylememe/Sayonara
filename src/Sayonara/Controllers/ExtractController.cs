@@ -72,7 +72,7 @@ namespace Sayonara.Controllers
 				.FirstOrDefaultAsync();			
 
 			if (nextExtract != null)
-			{
+			{				
 				return Ok(new
 				{
 					PublicID = nextExtract.PublicID,
@@ -92,7 +92,8 @@ namespace Sayonara.Controllers
 		public ActionResult Save([Bind("Format", "FacilityID", "ExtractionDate", "DocumentationViewID")]Extract extract)
 		{
 			if (ModelState.IsValid)
-			{				
+			{
+				var newPassword = Utilities.PasswordGenerator.Generate(12);
 				_sayonaraContext.Extracts.Add(new Extract
 				{
 					PublicID = System.Guid.NewGuid(),
@@ -103,8 +104,8 @@ namespace Sayonara.Controllers
 					Status = Extract.NotStartedStatus,
 					TotalCount = 0,
 					CurrentCount = 0,
-					Password = Utilities.PasswordGenerator.Generate(12)
-				});
+					Password = newPassword
+				});				
 
 				_sayonaraContext.SaveChanges();
 
