@@ -70,3 +70,7 @@ tr.hoverhighlight span.glyphicon{
 tr.highlighted span.glyphicon{
     visibility:visible;
 }
+
+tr.completed {
+	cursor: pointer;
+}

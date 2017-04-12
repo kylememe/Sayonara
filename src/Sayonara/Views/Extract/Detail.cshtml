@@ -8,17 +8,17 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-2 ">
-			<strong>Creator</strong>
+			<strong>Creator:</strong>
 			<br />
 			Kyle Smith
 		</div>
 		<div class="col-sm-2">
-			<strong>Extraction Date</strong>
+			<strong>Extraction Date:</strong>
 			<br />
 			@Model.ExtractionDate.ToString("MM/dd/yyyy")
 		</div>
 		<div class="col-sm-2">
-			<strong>Password</strong>
+			<strong>Password:</strong>
 			<br />
 			@Model.Password
 		</div>
@@ -28,7 +28,7 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-2 ">
-			<strong>Completion Date</strong>
+			<strong>Completion Date:</strong>
 			<br />
 			@if (Model.CompletionDate.HasValue)
 			{
@@ -37,7 +37,7 @@
 			&nbsp;
 		</div>
 		<div class="col-sm-2">
-			<strong>Shipped Date</strong>
+			<strong>Shipped Date:</strong>
 			<br />
 			@if (Model.ShippedDate.HasValue)
 			{
@@ -46,7 +46,7 @@
 			&nbsp;
 		</div>
 		<div class="col-sm-2">
-			<strong>Received Date</strong>
+			<strong>Received Date:</strong>
 			<br />
 			@if (Model.ReceivedDate.HasValue)
 			{
