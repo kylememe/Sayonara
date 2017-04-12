@@ -36,6 +36,18 @@ namespace Sayonara.Controllers
 				ToListAsync());
 		}
 
+		public async Task<IActionResult> Detail(int id)
+		{
+			var extract = await _sayonaraContext.Extracts
+				.AsNoTracking()
+				.SingleOrDefaultAsync(e => e.ID == id);
+
+			if (extract != null)
+				return View(extract);
+			else
+				return StatusCode(404);
+		}
+
 		[Route("api/Extract/CSV/Next")]
 		public async Task<IActionResult> NextCSVExtract(System.DateTime scheduledDate)
 		{
@@ -43,9 +55,7 @@ namespace Sayonara.Controllers
 			var nextExtract = await _sayonaraContext.Extracts
 				.Where(e => e.Format == ExtractType.CSV && e.ExtractionDate <= scheduledDate && e.Status == Extract.NotStartedStatus)
 				.OrderBy(e => e.ExtractionDate)
-				.FirstOrDefaultAsync();
-
-			var newPassword = new Utilities.PasswordGenerator();
+				.FirstOrDefaultAsync();			
 
 			if (nextExtract != null)
 			{
@@ -93,7 +103,7 @@ namespace Sayonara.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				var newPassword = Utilities.PasswordGenerator.Generate(12);
+				var newPassword = Utilities.PasswordGenerator.Generate(20);
 				_sayonaraContext.Extracts.Add(new Extract
 				{
 					PublicID = System.Guid.NewGuid(),

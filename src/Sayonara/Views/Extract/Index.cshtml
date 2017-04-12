@@ -27,7 +27,7 @@
 	<tbody>
 		@foreach (var item in Model)
 		{
-			<tr class="hoverhighlight">
+			<tr class="hoverhighlight" data-id="@item.ID">
 				<td>
 					@item.Facility.Alias (FacID: @item.FacilityID)					
 				</td>				
@@ -81,6 +81,21 @@
 	</tbody>
 </table>
 
+<div class="modal fade" id="mdlDetail" tabindex="-1" role="dialog" aria-labelledby="mdlDetailLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="mdlDetailLabel">Extract Detail</h4>
+			</div>
+			<div class="modal-body"></div>		
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>				
+			</div>
+		</div>
+	</div>
+</div>
+
 @section scripts
 {
 	<script type="text/javascript">
@@ -96,6 +111,14 @@
 					});
 			});
 
+			$('tr.hoverhighlight').click(function () {
+				var extractID = $(this).attr('data-id');				
+
+				$.get("/Extract/Detail/" + extractID, function (data) {
+					$("#mdlDetail div.modal-body").html(data);
+					$("#mdlDetail").modal('show');					
+				});
+			});
 		});
 
 	</script>
