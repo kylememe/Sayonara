@@ -26,13 +26,26 @@ namespace Sayonara.Controllers
 		[Route("api/Facilities")]
 		public async Task<IActionResult> Get(string query)
 		{
-			var facilities = await _sayonaraContext.Facilities
-				.Where(f => f.Name.StartsWith(query))
-				.Select(f => new { Name = f.Alias + " (FacID: " + f.ID + ")", ID = f.ID, Alias = f.Alias })
-				.ToAsyncEnumerable()
-				.ToArray();
+			if (query.StartsWith("@"))
+			{				
+				var facilities = await _sayonaraContext.Facilities
+					.Where(f => f.ID == Convert.ToInt32(query.Substring(1)))
+					.Select(f => new { Name = f.Alias + " (FacID: " + f.ID + ")", ID = f.ID, Alias = f.Alias })
+					.ToAsyncEnumerable()
+					.ToArray();
 
-			return Ok(facilities);
+				return Ok(facilities);
+			}
+			else
+			{
+				var facilities = await _sayonaraContext.Facilities
+					.Where(f => f.Alias.StartsWith(query))
+					.Select(f => new { Name = f.Alias + " (FacID: " + f.ID + ")", ID = f.ID, Alias = f.Alias })
+					.ToAsyncEnumerable()
+					.ToArray();
+
+				return Ok(facilities);
+			}
 		}
 
 		[HttpPost]
