@@ -39,6 +39,7 @@ namespace Sayonara.Controllers
 		public async Task<IActionResult> Detail(int id)
 		{
 			var extract = await _sayonaraContext.Extracts
+				.Include(e => e.Facility)
 				.AsNoTracking()
 				.SingleOrDefaultAsync(e => e.ID == id);
 

@@ -65,17 +65,9 @@
 					<br />
 					@Html.DisplayFor(modelItem => item.Status)
 				</td>
-				<td>
-					@if (item.Status == Sayonara.Models.Extract.NotStartedStatus)
-					{
-						<span class="glyphicon glyphicon-ban-circle" aria-hidden="true" data-publicID="@item.PublicID"></span>
-					}
-					else
-					{
-						<span>&nbsp;</span>
-					}
+				<td>					
+						<span class="glyphicon glyphicon-ban-circle" aria-hidden="true" data-publicID="@item.PublicID"></span>					
 				</td>
-
 			</tr>
 		}
 	</tbody>
@@ -100,7 +92,8 @@
 {
 	<script type="text/javascript">
 		$(function () {
-			$('span.glyphicon-ban-circle').click(function () {
+			$('span.glyphicon-ban-circle').click(function (e) {
+				e.stopPropagation();
 				var $spn = $(this);
 				var publicID = $spn.attr('data-publicID');
 
@@ -112,7 +105,9 @@
 			});
 
 			$('tr.completed').click(function () {
-				var extractID = $(this).attr('data-id');				
+				var extractID = $(this).attr('data-id');
+
+				$('#mdlDetail h4.modal-title').html($(this).find("td:first").html());
 
 				$.get("/Extract/Detail/" + extractID, function (data) {
 					$("#mdlDetail div.modal-body").html(data);
