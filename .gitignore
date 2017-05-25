@@ -28,3 +28,6 @@ src/Sayonara/bin/Debug/netcoreapp1.0/Sayonara.pdb
 src/Sayonara/obj/Debug/netcoreapp1.0/Sayonaradotnet-compile.deps.json
 src/Sayonara/bin/Debug/netcoreapp1.0/Sayonara.deps.json
 *.pdb
+src/Sayonara/Properties/PublishProfiles/SayonaraReDoc - Web Deploy.pubxml
+src/Sayonara/Properties/PublishProfiles/SayonaraReDoc - Web Deploy.pubxml.user
+src/Sayonara/ScaffoldingReadMe.txt

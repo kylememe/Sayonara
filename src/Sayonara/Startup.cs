@@ -37,16 +37,14 @@ namespace Sayonara
     {
 			services.AddDbContext<SayonaraContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SayonaraDB")));
 			
-			services.Configure<SayonaraOptions>(Configuration.GetSection("SayonaraOptions"));
-
-			/*
-			// Add Authentication services.
-			services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
-			*/
+			services.Configure<SayonaraOptions>(Configuration.GetSection("SayonaraOptions"));			
 
 			// Add framework services.
 			services.AddMvc();
-    }
+
+			// Add Authentication services.
+			services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+		}
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, SayonaraContext context)
@@ -67,7 +65,6 @@ namespace Sayonara
 
       app.UseStaticFiles();
 
-			/*
 			// Configure the OWIN pipeline to use cookie auth.
 			app.UseCookieAuthentication(new CookieAuthenticationOptions());
 
@@ -83,7 +80,6 @@ namespace Sayonara
 					OnRemoteFailure = OnAuthenticationFailed,
 				}
 			});
-			*/
 
 			app.UseMvc(routes =>
       {
@@ -102,5 +98,6 @@ namespace Sayonara
 			context.Response.Redirect("/Home/Error?message=" + context.Failure.Message);
 			return Task.FromResult(0);
 		}
+
 	}
 }
