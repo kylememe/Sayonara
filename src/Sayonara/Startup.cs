@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Sayonara.Utilities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace Sayonara
 {
@@ -37,10 +39,18 @@ namespace Sayonara
     {
 			services.AddDbContext<SayonaraContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SayonaraDB")));
 			
-			services.Configure<SayonaraOptions>(Configuration.GetSection("SayonaraOptions"));			
+			services.Configure<SayonaraOptions>(Configuration.GetSection("SayonaraOptions"));
 
-			// Add framework services.
-			services.AddMvc();
+			// Add framework services.			
+			services.AddMvc(config =>
+			{
+				//only allow authenticated users
+				var policy = new AuthorizationPolicyBuilder()
+				.RequireAuthenticatedUser()
+				.Build();
+
+				config.Filters.Add(new AuthorizeFilter(policy));
+			});						
 
 			// Add Authentication services.
 			services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
