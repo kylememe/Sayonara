@@ -7,6 +7,7 @@ using Sayonara.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -49,7 +50,7 @@ namespace Sayonara.Controllers
 				return StatusCode(404);
 		}
 
-		[Route("api/Extract/CSV/Next")]
+		[Route("api/Extract/CSV/Next")]		
 		public async Task<IActionResult> NextCSVExtract(System.DateTime scheduledDate)
 		{
 			_logger.LogInformation("Trying to get next CSV Extract with scheduled date of " + scheduledDate.ToString());
@@ -73,7 +74,7 @@ namespace Sayonara.Controllers
 			}				
 		}
 
-		[Route("api/Extract/PDF/Next")]
+		[Route("api/Extract/PDF/Next")]		
 		public async Task<IActionResult> NextPDFExtract(System.DateTime scheduledDate)
 		{
 			_logger.LogInformation("Trying to get next PDF Extract with scheduled date of " + scheduledDate.ToString());

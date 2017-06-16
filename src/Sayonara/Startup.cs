@@ -41,7 +41,7 @@ namespace Sayonara
 			
 			services.Configure<SayonaraOptions>(Configuration.GetSection("SayonaraOptions"));
 
-			// Add framework services.			
+			// Add framework services.						
 			services.AddMvc(config =>
 			{
 				//only allow authenticated users
@@ -50,7 +50,7 @@ namespace Sayonara
 				.Build();
 
 				config.Filters.Add(new AuthorizeFilter(policy));
-			});						
+			});												
 
 			// Add Authentication services.
 			services.AddAuthentication(sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
@@ -78,6 +78,14 @@ namespace Sayonara
 			// Configure the OWIN pipeline to use cookie auth.
 			app.UseCookieAuthentication(new CookieAuthenticationOptions());
 
+			//Allows the workers to authenticate using Azure AD bearer tokens
+			app.UseJwtBearerAuthentication(new JwtBearerOptions()
+			{
+				Audience = Configuration["AzureAd:Audience"],
+				Authority = String.Format(Configuration["AzureAd:AadInstance"], Configuration["AzureAd:Tenant"]),
+				AutomaticAuthenticate = true
+			});
+			
 			// Configure the OWIN pipeline to use OpenID Connect auth.
 			app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
 			{
@@ -88,9 +96,9 @@ namespace Sayonara
 				Events = new OpenIdConnectEvents
 				{
 					OnRemoteFailure = OnAuthenticationFailed,
-				}
-			});
-
+				}				 
+			});			
+			
 			app.UseMvc(routes =>
       {
         routes.MapRoute(
