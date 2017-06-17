@@ -8,11 +8,29 @@ Param(
     [string]$Database,
 
     [Parameter(Mandatory=$true)]
-    [string]$SayonaraUrl          
+    [string]$SayonaraUrl,
+
+    [Parameter(Mandatory=$true)]
+    [string]$SayonaraWorkerAzureAppID,
+    
+    [Parameter(Mandatory=$true)]
+    [string]$SayonaraWorkerAzureAppKey,
+
+    [Parameter(Mandatory=$true)]
+    [string]$SayonaraAzureAppURI
 )
 
 $SayonaraSeedFacilitiesUrl = $SayonaraUrl + "/api/Facilities/Seed"
 $SayonaraSeedDocumentationViewsUrl = $SayonaraUrl + "/api/DocumentationViews/Seed"
+
+### Load ADAL
+Add-Type -Path "$PSScriptRoot\Microsoft.IdentityModel.Clients.ActiveDirectory.dll"
+# Create Authentication Context tied to Azure AD Tenant
+$authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList "https://login.microsoftonline.com/nethealth.com"
+#Get client credential for app we are
+$clientCredential = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.ClientCredential" -ArgumentList $SayonaraWorkerAzureAppID, $SayonaraWorkerAzureAppKey
+#Get Access Token for use as Bearer Token
+$AccessToken = $authContext.AcquireTokenAsync($SayonaraAzureAppURI, $clientCredential).Result.AccessToken
 
 #Setup connection to use to get tables
 $cn = new-object system.data.SqlClient.SqlConnection("Data Source=" + $SqlServer + ";Initial Catalog=" + $Database + ";Trusted_Connection=True;");
@@ -72,7 +90,7 @@ $facilitiesJSON = $facilities | ConvertTo-Json
 $facilityJSONUTF = $enc.GetBytes($facilitiesJSON)
 
 try{
-Invoke-RestMethod $SayonaraSeedFacilitiesUrl -Method Post -Body $facilityJSONUTF -ContentType 'application/json;charset=utf-8'
+Invoke-RestMethod $SayonaraSeedFacilitiesUrl -Method Post -Body $facilityJSONUTF -ContentType 'application/json;charset=utf-8' -Headers @{"Authorization" = "Bearer $($AccessToken)"}
 }
 catch{
     Write-Host "Something went wrong with the facility seed: StatusCode:" $_.Exception.Response.StatusCode.value__
@@ -83,7 +101,7 @@ $viewsJSON = $views | ConvertTo-Json
 $viewJSONUTF = $enc.GetBytes($viewsJSON)
 
 try{
-Invoke-RestMethod $SayonaraSeedDocumentationViewsUrl -Method Post -Body $viewJSONUTF -ContentType 'application/json;charset=utf-8'
+Invoke-RestMethod $SayonaraSeedDocumentationViewsUrl -Method Post -Body $viewJSONUTF -ContentType 'application/json;charset=utf-8' -Headers @{"Authorization" = "Bearer $($AccessToken)"}
 }
 catch{
     Write-Host "Something went wrong with the view seed: StatusCode:" $_.Exception.Response.StatusCode.value__
