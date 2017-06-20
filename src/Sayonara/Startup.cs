@@ -82,17 +82,17 @@ namespace Sayonara
 			app.UseJwtBearerAuthentication(new JwtBearerOptions()
 			{
 				Audience = Configuration["AzureAd:Audience"],
-				Authority = String.Format(Configuration["AzureAd:AadInstance"], Configuration["AzureAd:Tenant"]),
+				Authority = "https://login.microsoftonline.com/nethealth.com",
 				AutomaticAuthenticate = true
 			});
-			
+
 			// Configure the OWIN pipeline to use OpenID Connect auth.
 			app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
 			{
+				Authority = "https://login.microsoftonline.com/nethealth.com",
 				ClientId = Configuration["AzureAD:ClientId"],
-				Authority = String.Format(Configuration["AzureAd:AadInstance"], Configuration["AzureAd:Tenant"]),
-				ResponseType = OpenIdConnectResponseType.IdToken,
 				PostLogoutRedirectUri = Configuration["AzureAd:PostLogoutRedirectUri"],
+				ResponseType = OpenIdConnectResponseType.IdToken,				
 				Events = new OpenIdConnectEvents
 				{
 					OnRemoteFailure = OnAuthenticationFailed,
