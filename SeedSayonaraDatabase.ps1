@@ -36,7 +36,7 @@ $AccessToken = $authContext.AcquireTokenAsync($SayonaraAzureAppURI, $clientCrede
 $cn = new-object system.data.SqlClient.SqlConnection("Data Source=" + $SqlServer + ";Initial Catalog=" + $Database + ";Trusted_Connection=True;");
 
 $facilities = @()
-$facilitiesQuery = "Select FacilityID, FacilityName, FacilityAlias From tbl_Facility Where ActiveFacility = 1"
+$facilitiesQuery = "Select FacilityID, FacilityName, FacilityAlias From tbl_Facility"
 
 #Setup Facilities for JSON
 $facilitiesDS = new-object "System.Data.DataSet" "tablesToExport"
@@ -58,11 +58,10 @@ $facilitiesTable | FOREACH-OBJECT {
 }
 
 $views = @()
-$viewsQuery = "Select DocumentationFacilityViewID, FacilityID, Name, MedicalRecordCopy 
+$viewsQuery = "Select DocumentationFacilityViewID, FacilityID, Name, MedicalRecordCopy, recActive
                 From tbl_DocumentationFacilityViews 
-                Where recActive = 1 
-                And FacilityID Is Not Null
-                And tbl_DocumentationFacilityViews.FacilityID In (Select FacilityID From tbl_Facility Where ActiveFacility = 1)"
+                Where FacilityID Is Not Null
+                And tbl_DocumentationFacilityViews.FacilityID In (Select FacilityID From tbl_Facility)"
 
 #Setup DocumentationViews for JSON
 $viewsDS = new-object "System.Data.DataSet" "tablesToExport"
@@ -78,6 +77,7 @@ $viewsTable | FOREACH-OBJECT {
         FacilityID = $_.FacilityID
         Name = $_.Name
         MedicalRecordCopy = $_.MedicalRecordCopy
+        recActive = $_.recActive
     }
 
     $views += $view
