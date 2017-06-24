@@ -31,7 +31,11 @@ namespace Sayonara.Controllers
 				.Where(f => f.ID == facilityID)
 				.SingleAsync();						
 
-			return Ok(facility.DocumentationViews.Select(view => new { view.ID, view.MedicalRecordCopy, view.Name }));
+			return Ok(facility.DocumentationViews
+				.Where(view => view.recActive == 1)
+				.Select(view => new { view.ID, view.MedicalRecordCopy, view.Name })
+				);
+
 		}
 
 		[HttpPost]
@@ -46,6 +50,7 @@ namespace Sayonara.Controllers
 				{
 					currentView.Name = view.Name;
 					currentView.MedicalRecordCopy = view.MedicalRecordCopy;
+					currentView.recActive = view.recActive;
 					_sayonaraContext.DocumentationViews.Update(currentView);
 				}
 				else
@@ -55,14 +60,27 @@ namespace Sayonara.Controllers
 						ID = view.ID,
 						FacilityID = view.FacilityID,
 						Name = view.Name,
-						MedicalRecordCopy = view.MedicalRecordCopy
-					});
+						MedicalRecordCopy = view.MedicalRecordCopy,
+						recActive = view.recActive
+				});
 				}
 			}
 
-			await _sayonaraContext.SaveChangesAsync();
+			var success = false;
+			try
+			{
+				await _sayonaraContext.SaveChangesAsync();
+				success = true;
+			}
+			catch(Exception ex)
+			{
+				_logger.LogError("DocumentationView Seed failed with message: " + ex.Message);
+			}
 
-			return Ok();
+			if (success)
+				return Ok();
+			else
+				return StatusCode(500);
 		}
 	}
 }

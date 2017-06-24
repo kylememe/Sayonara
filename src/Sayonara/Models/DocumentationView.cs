@@ -17,6 +17,9 @@ namespace Sayonara.Models
 
 			public bool MedicalRecordCopy { get; set; }
 
+			public int recActive { get; set; }
+
 			public Facility Facility { get; set; }
+			
     }
 }
