@@ -20,6 +20,41 @@ Param(
     [string]$SayonaraAzureAppURI
 )
 
+function Split-array 
+{
+
+<#  
+  .SYNOPSIS   
+    Split an array 
+  .PARAMETER inArray
+   A one dimensional array you want to split
+  .EXAMPLE  
+   Split-array -inArray @(1,2,3,4,5,6,7,8,9,10) -parts 3
+  .EXAMPLE  
+   Split-array -inArray @(1,2,3,4,5,6,7,8,9,10) -size 3
+#> 
+
+  param($inArray,[int]$parts,[int]$size)
+  
+  if ($parts) {
+    $PartSize = [Math]::Ceiling($inArray.count / $parts)
+  } 
+  if ($size) {
+    $PartSize = $size
+    $parts = [Math]::Ceiling($inArray.count / $size)
+  }
+
+  $outArray = @()
+  for ($i=1; $i -le $parts; $i++) {
+    $start = (($i-1)*$PartSize)
+    $end = (($i)*$PartSize) - 1
+    if ($end -ge $inArray.count) {$end = $inArray.count}
+    $outArray+=,@($inArray[$start..$end])
+  }
+  return ,$outArray
+
+}
+
 $SayonaraSeedFacilitiesUrl = $SayonaraUrl + "/api/Facilities/Seed"
 $SayonaraSeedDocumentationViewsUrl = $SayonaraUrl + "/api/DocumentationViews/Seed"
 
@@ -33,7 +68,7 @@ $clientCredential = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.
 $AccessToken = $authContext.AcquireTokenAsync($SayonaraAzureAppURI, $clientCredential).Result.AccessToken
 
 #Setup connection to use to get tables
-$cn = new-object system.data.SqlClient.SqlConnection("Data Source=" + $SqlServer + ";Initial Catalog=" + $Database + ";Trusted_Connection=True;");
+$cn = new-object system.data.SqlClient.SqlConnection("Data Source=" + $SqlServer + ";Initial Catalog=" + $Database + ";Trusted_Connection=True");
 
 $facilities = @()
 $facilitiesQuery = "Select FacilityID, FacilityName, FacilityAlias From tbl_Facility"
@@ -71,6 +106,7 @@ $da.Fill($viewsDS)
 $viewsTable = new-object "System.Data.DataTable" "tables"
 $viewsTable = $viewsDS.Tables[0]
 
+
 $viewsTable | FOREACH-OBJECT {
     $view = @{
         ID = $_.DocumentationFacilityViewID
@@ -83,6 +119,15 @@ $viewsTable | FOREACH-OBJECT {
     $views += $view
 }
 
+$bucketViews = Split-array -inArray $views -parts 5
+
+$bucketViews[0].length 
+$bucketViews[1].length 
+$bucketViews[2].length 
+$bucketViews[3].length 
+$bucketViews[$bucketViews.length - 1].length
+
+<#
 $enc = [system.Text.Encoding]::UTF8
 
 $facilitiesJSON = $facilities | ConvertTo-Json
@@ -93,7 +138,7 @@ try{
 Invoke-RestMethod $SayonaraSeedFacilitiesUrl -Method Post -Body $facilityJSONUTF -ContentType 'application/json;charset=utf-8' -Headers @{"Authorization" = "Bearer $($AccessToken)"}
 }
 catch{
-    Write-Host "Something went wrong with the facility seed: StatusCode:" $_.Exception.Response.StatusCode.value__
+    Write-Host "Something went wrong with the facility seed: StatusCode:" + $_.Exception.Response.StatusCode.value__
 }
 
 $viewsJSON = $views | ConvertTo-Json 
@@ -104,6 +149,6 @@ try{
 Invoke-RestMethod $SayonaraSeedDocumentationViewsUrl -Method Post -Body $viewJSONUTF -ContentType 'application/json;charset=utf-8' -Headers @{"Authorization" = "Bearer $($AccessToken)"}
 }
 catch{
-    Write-Host "Something went wrong with the view seed: StatusCode:" $_.Exception.Response.StatusCode.value__
+    Write-Host "Something went wrong with the view seed: StatusCode: " + $_
 }
-
+#>
