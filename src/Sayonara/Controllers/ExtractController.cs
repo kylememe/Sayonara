@@ -101,12 +101,24 @@ namespace Sayonara.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Save([Bind("Format", "FacilityID", "ExtractionDate", "DocumentationViewID")]Extract extract)
+		public async Task<IActionResult> Save([Bind("Format", "FacilityID", "ExtractionDate", "DocumentationViewID")]Extract extract)
 		{
 			if (ModelState.IsValid)
 			{
-				var newPassword = Utilities.PasswordGenerator.Generate(20);
-				_sayonaraContext.Extracts.Add(new Extract
+                string newPassword; 
+
+                //Check if there's another extract. This way we should get CSV and PDF extracts to share same randomly generated password. 
+                var currentExtract = await _sayonaraContext.Extracts
+                .Where(e => e.FacilityID == extract.FacilityID)
+                .OrderByDescending(e => e.ExtractionDate)
+                .FirstOrDefaultAsync();
+
+                if (currentExtract != null)
+                    newPassword = currentExtract.Password;
+                else
+                    newPassword = Utilities.PasswordGenerator.Generate(20);
+
+                _sayonaraContext.Extracts.Add(new Extract
 				{
 					PublicID = System.Guid.NewGuid(),
 					FacilityID = extract.FacilityID,
