@@ -120,19 +120,28 @@ $viewsTable | FOREACH-OBJECT {
 
 $enc = [system.Text.Encoding]::UTF8
 
-$facilitiesJSON = $facilities | ConvertTo-Json
+#We chunk the facilities so the seed process doesn't time out.
+$NumberOfChunks = [Math]::Ceiling($facilities.length / 500)
+$chunkedFacilities = Split-array -inArray $facilities -parts $NumberOfChunks
 
-$facilityJSONUTF = $enc.GetBytes($facilitiesJSON)
+for ($i=0; $i -lt $chunkedFacilities.length; $i++) {
 
-try{
-  Invoke-RestMethod $SayonaraSeedFacilitiesUrl -Method Post -Body $facilityJSONUTF -ContentType 'application/json;charset=utf-8' -Headers @{"Authorization" = "Bearer $($AccessToken)"}
+  $facilitiesJSON = $chunkedFacilities[$i] | ConvertTo-Json 
+
+  $facilityJSONUTF = $enc.GetBytes($facilitiesJSON)
+
+  try{
+    Invoke-RestMethod $SayonaraSeedFacilitiesUrl -Method Post -Body $facilityJSONUTF -ContentType 'application/json;charset=utf-8' -Headers @{"Authorization" = "Bearer $($AccessToken)"}
+    Write-Host "Succesful facilities chunk post"
+  }
+  catch{
+    Write-Host "Something went wrong with the facility seed: StatusCode:" + $_.Exception.Response.StatusCode.value__
+  }
+    
 }
-catch{
-  Write-Host "Something went wrong with the facility seed: StatusCode:" + $_.Exception.Response.StatusCode.value__
-}
 
-#We chunk the views because the full list was timing out the seed process
-$NumberOfChunks = [Math]::Ceiling($views.length / 5000)
+#We chunk the documentation views so the seed process doesn't time out.
+$NumberOfChunks = [Math]::Ceiling($views.length / 500)
 $chunkedViews = Split-array -inArray $views -parts $NumberOfChunks
 
 for ($i=0; $i -lt $chunkedViews.length; $i++) {
@@ -143,10 +152,10 @@ for ($i=0; $i -lt $chunkedViews.length; $i++) {
 
   try{
     Invoke-RestMethod $SayonaraSeedDocumentationViewsUrl -Method Post -Body $viewJSONUTF -ContentType 'application/json;charset=utf-8' -Headers @{"Authorization" = "Bearer $($AccessToken)"}
-    Write-Host "Succesful chunk post"
+    Write-Host "Succesful doc Views chunk post"
   }
   catch{
-    Write-Host "Something went wrong with the view seed: StatusCode: " + $_
+    Write-Host "Something went wrong with the view seed: StatusCode: " + $_.Exception.Response.StatusCode.value__
   }
     
 }
