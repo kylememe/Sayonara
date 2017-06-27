@@ -101,7 +101,7 @@ namespace Sayonara.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Save([Bind("Format", "FacilityID", "ExtractionDate", "DocumentationViewID")]Extract extract)
+		public async Task<IActionResult> Save([Bind("Format", "FacilityID", "ExtractionDate", "DocumentationViewID", "ContactName", "Address1", "Address2", "City", "State", "ZipCode")]Extract extract)
 		{
 			if (ModelState.IsValid)
 			{
@@ -128,7 +128,13 @@ namespace Sayonara.Controllers
 					Status = Extract.NotStartedStatus,
 					TotalCount = 0,
 					CurrentCount = 0,
-					Password = newPassword
+					Password = newPassword,
+                    ContactName = extract.ContactName,
+                    Address1 = extract.Address1,
+                    Address2 = extract.Address2,
+                    City = extract.City,
+                    State = extract.State,
+                    ZipCode = extract.ZipCode
 				});				
 
 				_sayonaraContext.SaveChanges();

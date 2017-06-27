@@ -30,8 +30,18 @@ namespace Sayonara.Controllers
 			{				
 				var facilities = await _sayonaraContext.Facilities
 					.Where(f => f.ID == Convert.ToInt32(query.Substring(1)))
-					.Select(f => new { Name = f.Alias + " (FacID: " + f.ID + ")", ID = f.ID, Alias = f.Alias })
-					.ToAsyncEnumerable()
+					.Select(f => new {
+                        Name = f.Alias + " (FacID: " + f.ID + ")",
+                        ID = f.ID,
+                        Alias = f.Alias,
+                        ContactName = f.ContactName,
+                        Address1 = f.Address1,
+                        Address2 = f.Address2,
+                        City = f.City,
+                        State = f.State,
+                        ZipCode = f.ZipCode
+                    })
+                    .ToAsyncEnumerable()
 					.ToArray();
 
 				return Ok(facilities);
@@ -40,8 +50,18 @@ namespace Sayonara.Controllers
 			{
 				var facilities = await _sayonaraContext.Facilities
 					.Where(f => f.Alias.StartsWith(query))
-					.Select(f => new { Name = f.Alias + " (FacID: " + f.ID + ")", ID = f.ID, Alias = f.Alias })
-					.ToAsyncEnumerable()
+					.Select(f => new {
+                        Name = f.Alias + " (FacID: " + f.ID + ")",
+                        ID = f.ID,
+                        Alias = f.Alias,
+                        ContactName = f.ContactName,
+                        Address1 = f.Address1,
+                        Address2 = f.Address2,
+                        City = f.City,
+                        State = f.State,
+                        ZipCode = f.ZipCode
+                    })
+                    .ToAsyncEnumerable()
 					.ToArray();
 
 				return Ok(facilities);

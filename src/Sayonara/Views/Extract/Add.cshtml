@@ -20,32 +20,64 @@
 						<input type="hidden" name="facilityID" />
 					</div>
 				</div>
+                <div class="row">                    
+                    <div class="col-lg-6">
+                        <div class="control-group">                                
+                            <label>Ship to Address</label>
+                            <div class="controls">
+                                <p>
+                                    <input id="contactName" type="text" name="ContactName" placeholder="Contact Name" />
+                                </p>
+                            </div>                            
+                            <div class="controls">
+                                <p>
+                                    <input id="address1" type="text" name="Address1" placeholder="Address1" />                                        
+                                </p>                                    
+                            </div>
+                            <div class="controls">
+                                <p>                                        
+                                    <input id="address2" type="text" name="Address2" placeholder="Address2" />
+                                </p>
+                            </div>
+                            <div class="controls">
+                                <p>
+                                    <input id="city" type="text" name="City" placeholder="City" />
+                                    <input id="state" type="text" name="State" placeholder="State" size="2" />
+                                    <input id="zipCode" type="text" name="ZipCode" placeholder="Zip" size="5" />
+                                </p>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="control-group">
+                            <label>Type</label>
+                            <div class="controls">
+                                <p>
+                                    <button type="button" class="btn btn-primary btn-med">CSV</button>
+                                    <button type="button" class="btn btn-default btn-med">PDF</button>
+                                </p>
+                                <input type="hidden" name="format" value="csv" />
+                            </div>
+                        </div>
+                        <div id="docView" class="control-group hidden">
+                            <label for="documentationview">Documentation View</label>
+                            <div class="controls">
+                                <select id="documentationview" name="DocumentationViewID">
+                                    <option>-- Facility Not Selected --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="extractiondate">Extract Date</label>
+                            <div class="controls">
+                                <input type="date" id="extractiondate" name="extractiondate" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
 				<div class="control-group">
-					<label>Type</label>
-					<div class="controls">
-						<p>
-							<button type="button" class="btn btn-primary btn-med">CSV</button>
-							<button type="button" class="btn btn-default btn-med">PDF</button>
-						</p>
-						<input type="hidden" name="format" value="csv" />
-					</div>
-				</div>
-				<div id="docView" class="control-group hidden">
-					<label for="documentationview">Documentation View</label>
-					<div class="controls">
-						<select id="documentationview" name="DocumentationViewID">
-							<option>-- Facility Not Selected --</option>
-						</select>
-					</div>
-				</div>
-				<div class="control-group">
-					<label for="extractiondate">Extract Date</label>
-					<div class="controls">
-						<input type="date" id ="extractiondate" name="extractiondate" />
-					</div>
-				</div>
-				<div class="control-group">
-					<div class="controls">
+					<div class="controls pull-right">
 						<button type="submit" class="btn btn-primary">Submit</button>
 						<a asp-controller="Home" asp-action="index" class="btn btn-default" role="button">Cancel</a>						
 					</div>
@@ -92,8 +124,14 @@
 				source: facilities
 			});
 
-			$('#facilitySearch').bind('typeahead:select', function (ev, suggestion) {
-				$("div.controls input[name='facilityID']").val(suggestion.id);
+            $('#facilitySearch').bind('typeahead:select', function (ev, suggestion) {                
+                $("div.controls input[name='facilityID']").val(suggestion.id);
+                $("#contactName").val(suggestion.contactName);
+                $("#address1").val(suggestion.address1);
+                $("#address2").val(suggestion.address2);
+                $("#city").val(suggestion.city);
+                $("#state").val(suggestion.state);
+                $("#zipCode").val(suggestion.zipCode);
 				$.getJSON('/api/DocumentationViews?FacilityID=' + suggestion.id, function (data) {
 					var html = '';
 					var len = data.length;

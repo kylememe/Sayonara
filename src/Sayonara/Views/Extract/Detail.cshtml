@@ -26,6 +26,7 @@
 	<div class="row">
 		<div class="col-sm-6">&nbsp;</div>
 	</div>
+    <!--
 	<div class="row">
 		<div class="col-sm-2 ">
 			<strong>Completion Date:</strong>
@@ -55,5 +56,20 @@
 			&nbsp;
 		</div>
 	</div>
+    -->
+    <div class="row">
+        <div class="col-sm-6">
+            <strong>Ship to Info:</strong>
+            <address>
+                @Model.ContactName<br />
+                @Model.Address1<br />
+                @if (!String.IsNullOrEmpty(Model.Address2))
+                {
+                    @Model.Address2<br />
+                }                
+                @Model.City, @Model.State @Model.ZipCode
+            </address>
+        </div>
+    </div>
 </div>
 
