@@ -1,4 +1,8 @@
-﻿@model IEnumerable<Sayonara.Models.Extract>
+﻿@using Microsoft.Extensions.Options;
+@using Sayonara.Utilities;
+@inject IOptions<SayonaraOptions> sayonaraOptions
+
+@model IEnumerable<Sayonara.Models.Extract>
 
 @{
 	ViewData["Title"] = "Index";
@@ -21,6 +25,7 @@
 			<th>
 				Status
 			</th>
+            <th>&nbsp;</th>
 			<th>&nbsp;</th>
 		</tr>
 	</thead>
@@ -65,8 +70,18 @@
 					<br />
 					@Html.DisplayFor(modelItem => item.Status)
 				</td>
+                <td>
+                    @if (item.Status == "Completed")
+                    {
+                        <span class="glyphicon glyphicon-download"></span>
+                    }
+                    else
+                    {
+                        <span>&nbsp;</span>
+                    }
+                </td>
 				<td>					
-						<span class="glyphicon glyphicon-ban-circle" aria-hidden="true" data-publicID="@item.PublicID"></span>					
+					<span class="glyphicon glyphicon-ban-circle" aria-hidden="true" data-publicID="@item.PublicID"></span>					
 				</td>
 			</tr>
 		}
@@ -99,10 +114,16 @@
 
 				var result = confirm("Are you sure you want to remove this extract?");
 				if (result)
-					$.post('/api/Extract/Delete', { PublicID: publicID }, function () {						
+					$.post('/api/Extract/Delete', { PublicID: publicID }, function () {
 						$spn.parent().parent().remove();
 					});
-			});
+            });
+
+            $('span.glyphicon-download').click(function (e) {
+                e.stopPropagation();                
+                window.open("file://@sayonaraOptions.Value.ExtractFolder", "_new");
+            });
+
 
 			$('tr.completed').click(function () {
 				var extractID = $(this).attr('data-id');
@@ -111,7 +132,7 @@
 
 				$.get("/Extract/Detail/" + extractID, function (data) {
 					$("#mdlDetail div.modal-body").html(data);
-					$("#mdlDetail").modal('show');					
+					$("#mdlDetail").modal('show');
 				});
 			});
 		});
