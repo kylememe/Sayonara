@@ -60,6 +60,12 @@ namespace Sayonara.Controllers
 				{					
 					currentFacility.Name = facility.Name;
 					currentFacility.Alias = facility.Alias;
+					currentFacility.ContactName = facility.ContactName;
+					currentFacility.Address1 = facility.Address1;
+					currentFacility.Address2 = facility.Address2;
+					currentFacility.City = facility.City;
+					currentFacility.State = facility.State;
+					currentFacility.ZipCode = facility.ZipCode;
 					_sayonaraContext.Facilities.Update(currentFacility);										
 				}
 				else
@@ -68,7 +74,13 @@ namespace Sayonara.Controllers
 					{
 						ID = facility.ID,
 						Alias = facility.Alias,
-						Name = facility.Name
+						Name = facility.Name,
+						ContactName = facility.ContactName,
+						Address1 = facility.Address1,
+						Address2 = facility.Address2,
+						City = facility.City,
+						State = facility.State,
+						ZipCode = facility.ZipCode
 					});
 				}				
 			}

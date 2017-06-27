@@ -34,6 +34,14 @@ namespace Sayonara.Models
 		public string FilePath { get; set; }
 		public string Password { get; set; }
 
+		//Properties for address
+		public string ContactName { get; set; }
+		public string Address1 { get; set; }
+		public string Address2 { get; set; }
+		public string City { get; set; }
+		public string State { get; set; }
+		public string ZipCode { get; set; }
+
 		public Facility Facility { get; set; }
 
 		public DocumentationView DocumentationView { get; set; }

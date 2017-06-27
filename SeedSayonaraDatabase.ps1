@@ -70,7 +70,9 @@ $AccessToken = $authContext.AcquireTokenAsync($SayonaraAzureAppURI, $clientCrede
 $cn = new-object system.data.SqlClient.SqlConnection("Data Source=" + $SqlServer + ";Initial Catalog=" + $Database + ";Trusted_Connection=True;");
 
 $facilities = @()
-$facilitiesQuery = "Select FacilityID, FacilityName, FacilityAlias From tbl_Facility"
+$facilitiesQuery = "Select FacilityID, FacilityName, FacilityAlias, 
+                    AdminFName, AdminLName, FacilityAddress1, FacilityAddress2, FacilityCity, FacilityState, FacilityZip 
+                    From tbl_Facility"
 
 #Setup Facilities for JSON
 $facilitiesDS = new-object "System.Data.DataSet" "tablesToExport"
@@ -81,11 +83,17 @@ $facilitiesTable = new-object "System.Data.DataTable" "tables"
 $facilitiesTable = $facilitiesDS.Tables[0]
 
 $facilitiesTable | FOREACH-OBJECT {
-    
+    $ContactName = $_.AdminFName + " " + $_.AdminLName
     $facility = @{
         ID = $_.FacilityID
         Name = $_.FacilityName
         Alias = $_.FacilityAlias
+        ContactName = $ContactName
+        Address1 = $_.FacilityAddress1
+        Address2 = $_.FacilityAddress2
+        City = $_.FacilityCity
+        State = $_.FacilityState
+        ZipCode = $_.FacilityZip
     }
 
     $facilities += $facility
