@@ -8,6 +8,7 @@ namespace Sayonara.Utilities
 	public class SayonaraOptions
 	{
 		public string ApplicationName { get; set; }
-        public string ExtractFolder { get; set; }
-   }
+    public string ExtractFolder { get; set; }
+		public string ExtractLetterPath { get; set; }
+	}
 }

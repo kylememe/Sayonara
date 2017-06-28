@@ -1,12 +1,22 @@
 ﻿@using System.Security.Claims
+@using System.Net;
+@using Microsoft.Extensions.Options;
+@using Sayonara.Utilities;
+@inject IOptions<SayonaraOptions> sayonaraOptions
+
 
 @if (User.Identity.IsAuthenticated)
 {  
   <ul class="nav navbar-nav navbar-right">
     <li>
+			<a href="file://@WebUtility.UrlEncode(sayonaraOptions.Value.ExtractLetterPath)" target="_new">Extract Letter</a>
+		</li>
+		<li>
       <a asp-controller="Manage" asp-action="Index" title="Manage">Hello @User.Identity.Name!</a>
     </li>
-    <li><a asp-controller="Security" asp-action="Logoff">Log off</a></li>
+    <li>
+			<a asp-controller="Security" asp-action="Logoff">Log off</a>
+		</li>
   </ul>  
 }
 else

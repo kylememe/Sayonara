@@ -73,7 +73,7 @@
                 <td>
                     @if (item.Status == "Completed")
                     {
-                        <span class="glyphicon glyphicon-download"></span>
+                        <span class="glyphicon glyphicon-download" data-extractFormat="@(item.Format == Sayonara.Models.ExtractType.CSV ? "CSV" : "PDF")"></span>
                     }
                     else
                     {
@@ -117,12 +117,13 @@
 					$.post('/api/Extract/Delete', { PublicID: publicID }, function () {
 						$spn.parent().parent().remove();
 					});
-            });
+      });
 
-            $('span.glyphicon-download').click(function (e) {
-                e.stopPropagation();                
-                window.open("file://@sayonaraOptions.Value.ExtractFolder", "_new");
-            });
+      $('span.glyphicon-download').click(function (e) {
+				e.stopPropagation();				
+				var format = $(this).attr('data-extractFormat');				
+				window.open("file://@sayonaraOptions.Value.ExtractFolder/" + format, "_new");
+      });
 
 
 			$('tr.completed').click(function () {
