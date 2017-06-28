@@ -129,6 +129,7 @@ namespace Sayonara.Controllers
 					TotalCount = 0,
 					CurrentCount = 0,
 					Password = newPassword,
+                    CreatedBy = User.Identity.Name,
                     ContactName = extract.ContactName,
                     Address1 = extract.Address1,
                     Address2 = extract.Address2,

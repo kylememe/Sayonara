@@ -63,8 +63,7 @@ div.defaultform div.control-group{
     cursor: pointer;
 }
 
-.glyphicon.glyphicon-download {
-    font-size: 20px;
+.glyphicon.glyphicon-duplicate {    
     cursor: pointer;
 }
 

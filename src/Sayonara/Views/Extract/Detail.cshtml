@@ -1,8 +1,12 @@
-﻿@model Sayonara.Models.Extract
+﻿@using Microsoft.Extensions.Options;
+@using Sayonara.Utilities;
+@inject IOptions<SayonaraOptions> sayonaraOptions
+
+@model Sayonara.Models.Extract
 
 @{
-	ViewData["Title"] = "Extract Detail";
-	Layout = null;
+    ViewData["Title"] = "Extract Detail";
+    Layout = null;
 }
 
 <div class="container">	
@@ -32,27 +36,27 @@
 			<strong>Completion Date:</strong>
 			<br />
 			@if (Model.CompletionDate.HasValue)
-			{
+            {
 				@Model.CompletionDate.Value.ToString("MM/dd/yyyy")
-			}
+            }
 			&nbsp;
 		</div>
 		<div class="col-sm-2">
 			<strong>Shipped Date:</strong>
 			<br />
 			@if (Model.ShippedDate.HasValue)
-			{
+            {
 				@Model.ShippedDate.Value.ToString("MM/dd/yyyy")
-			}
+            }
 			&nbsp;
 		</div>
 		<div class="col-sm-2">
 			<strong>Received Date:</strong>
 			<br />
 			@if (Model.ReceivedDate.HasValue)
-			{
+            {
 				@Model.ReceivedDate.Value.ToString("MM/dd/yyyy")
-			}
+            }
 			&nbsp;
 		</div>
 	</div>
@@ -69,6 +73,23 @@
                 }                
                 @Model.City, @Model.State @Model.ZipCode
             </address>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <strong>Location:</strong>
+            @{
+                string path;
+                if (Model.Format == ExtractType.CSV)
+                {
+                    path = sayonaraOptions.Value.ExtractFolder + "\\CSV";
+                }
+                else
+                {
+                    path = sayonaraOptions.Value.ExtractFolder + "\\PDF";
+                }
+            }
+            <span id="downloadPath">@path</span>&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-duplicate" data-clipboard-target="#downloadPath"></span>
         </div>
     </div>
 </div>
