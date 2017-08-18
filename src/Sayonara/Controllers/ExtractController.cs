@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Sayonara.Models;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
-using Microsoft.AspNetCore.Authorization;
+using MailKit.Net.Smtp;
+using MimeKit;
+using MailKit.Security;
+using Microsoft.Extensions.Options;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,11 +17,14 @@ namespace Sayonara.Controllers
 	public class ExtractController : Controller
 	{		
 		private Sayonara.Data.SayonaraContext _sayonaraContext;
+		private readonly IOptions<Sayonara.Utilities.SayonaraOptions> _sayonaraOptions;
 		private ILogger _logger;
-		public ExtractController(Sayonara.Data.SayonaraContext context, ILogger<ExtractController> logger)
+
+		public ExtractController(Sayonara.Data.SayonaraContext context, ILogger<ExtractController> logger, IOptions<Sayonara.Utilities.SayonaraOptions> sayonaraOptions)
 		{
 			_sayonaraContext = context;
 			_logger = logger;
+			_sayonaraOptions = sayonaraOptions;
 		}
 
 		public IActionResult Add()
@@ -205,6 +209,33 @@ namespace Sayonara.Controllers
 					extract.Status = dto.Status;
 					extract.CompletionDate = dto.CompletionDate;						
 					await _sayonaraContext.SaveChangesAsync();
+
+					if((dto.CompletionDate.HasValue) && (!String.IsNullOrEmpty(_sayonaraOptions.Value.SMTPServer)))
+					{
+						var extractFacility = await _sayonaraContext.Facilities.SingleOrDefaultAsync(f => f.ID == extract.FacilityID);
+						var emailMessage = new MimeMessage();						
+						emailMessage.From.Add(new MailboxAddress(_sayonaraOptions.Value.ApplicationName, "sayonarastatus@nethealth.com"));
+						emailMessage.To.Add(new MailboxAddress("Extract Creator", extract.CreatedBy));
+						emailMessage.Subject = extractFacility.Name + "'s extract is done";
+
+						string path;
+						if (extract.Format == ExtractType.CSV)						
+							path = _sayonaraOptions.Value.ExtractFolder + "\\CSV";						
+						else						
+							path = _sayonaraOptions.Value.ExtractFolder + "\\PDF";						
+
+						emailMessage.Body = new TextPart("plain") { Text = "Extract is at " + path };
+
+						using (var client = new SmtpClient())
+						{							
+							await client.ConnectAsync(_sayonaraOptions.Value.SMTPServer, Convert.ToInt32(_sayonaraOptions.Value.SMTPPort), SecureSocketOptions.None).ConfigureAwait(false);
+							await client.AuthenticateAsync(_sayonaraOptions.Value.SMTPUsername, _sayonaraOptions.Value.SMTPPassword).ConfigureAwait(false);
+							await client.SendAsync(emailMessage).ConfigureAwait(false);
+							await client.DisconnectAsync(true).ConfigureAwait(false);
+						}
+
+					}
+
 				}
 				return Ok();				
 			}
