@@ -202,7 +202,7 @@ namespace Sayonara.Controllers
 
 			if (extract != null)
 			{
-				if (extract.CompletionDate == null)
+				if (extract.CompletionDate == null) //Don't want to update extracts that were already completed.
 				{
 					extract.CurrentCount = dto.CurrentCount;
 					extract.TotalCount = dto.TotalCount;
@@ -210,21 +210,31 @@ namespace Sayonara.Controllers
 					extract.CompletionDate = dto.CompletionDate;						
 					await _sayonaraContext.SaveChangesAsync();
 
-					if((dto.CompletionDate.HasValue) && (!String.IsNullOrEmpty(_sayonaraOptions.Value.SMTPServer)))
+                    //If email is setup, send a status email on complete (ComplettionDate.HasValue) or on failure (Status.Containts("failed")
+					if((!String.IsNullOrEmpty(_sayonaraOptions.Value.SMTPServer)) && ((dto.CompletionDate.HasValue) || (dto.Status.Contains("failed"))))
 					{
 						var extractFacility = await _sayonaraContext.Facilities.SingleOrDefaultAsync(f => f.ID == extract.FacilityID);
 						var emailMessage = new MimeMessage();						
 						emailMessage.From.Add(new MailboxAddress(_sayonaraOptions.Value.ApplicationName, "sayonarastatus@nethealth.com"));
 						emailMessage.To.Add(new MailboxAddress("Extract Creator", extract.CreatedBy));
-						emailMessage.Subject = extractFacility.Name + "'s extract is done";
 
-						string path;
-						if (extract.Format == ExtractType.CSV)						
-							path = _sayonaraOptions.Value.ExtractFolder + "\\CSV";						
-						else						
-							path = _sayonaraOptions.Value.ExtractFolder + "\\PDF";						
+                        if (dto.CompletionDate.HasValue)
+                        {
+                            emailMessage.Subject = extractFacility.Name + "'s extract is done";
 
-						emailMessage.Body = new TextPart("plain") { Text = "Extract is at " + path };
+                            string path;
+                            if (extract.Format == ExtractType.CSV)
+                                path = _sayonaraOptions.Value.ExtractFolder + "\\CSV";
+                            else
+                                path = _sayonaraOptions.Value.ExtractFolder + "\\PDF";
+
+                            emailMessage.Body = new TextPart("plain") { Text = "Extract is at " + path };
+                        }
+                        else
+                        {
+                            emailMessage.Subject = extractFacility.Name + "'s extract did not complete";
+                            emailMessage.Body = new TextPart("plain") { Text = "Extract did not succesfully complete. Check Status in Sayonara" };
+                        }
 
 						using (var client = new SmtpClient())
 						{							
