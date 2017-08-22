@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="2.4.337" />
-    <PackageReference Include="MailKit" Version="1.18.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.1" />
@@ -49,6 +48,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="1.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.0" />
+    <PackageReference Include="Sendgrid" Version="9.8.0" />
   </ItemGroup>
 
   <ItemGroup>

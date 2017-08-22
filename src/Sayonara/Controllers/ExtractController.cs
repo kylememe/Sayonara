@@ -1,14 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
-using Sayonara.Models;
 using Microsoft.Extensions.Logging;
-using System;
-using MailKit.Net.Smtp;
-using MimeKit;
-using MailKit.Security;
 using Microsoft.Extensions.Options;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using Sayonara.Models;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -210,42 +209,36 @@ namespace Sayonara.Controllers
 					extract.CompletionDate = dto.CompletionDate;						
 					await _sayonaraContext.SaveChangesAsync();
 
-                    //If email is setup, send a status email on complete (ComplettionDate.HasValue) or on failure (Status.Containts("failed")
-					if((!String.IsNullOrEmpty(_sayonaraOptions.Value.SMTPServer)) && ((dto.CompletionDate.HasValue) || (dto.Status.Contains("failed"))))
+          //If email is setup, send a status email on complete (ComplettionDate.HasValue) or on failure (Status.Containts("failed")
+					if((!String.IsNullOrEmpty(_sayonaraOptions.Value.SendGridAPIKey)) && ((dto.CompletionDate.HasValue) || (dto.Status.Contains("failed"))))
 					{
-						var extractFacility = await _sayonaraContext.Facilities.SingleOrDefaultAsync(f => f.ID == extract.FacilityID);
-						var emailMessage = new MimeMessage();						
-						emailMessage.From.Add(new MailboxAddress(_sayonaraOptions.Value.ApplicationName, "sayonarastatus@nethealth.com"));
-						emailMessage.To.Add(new MailboxAddress("Extract Creator", extract.CreatedBy));
+						var extractFacility = await _sayonaraContext.Facilities.SingleOrDefaultAsync(f => f.ID == extract.FacilityID);						
+						var client = new SendGridClient(_sayonaraOptions.Value.SendGridAPIKey);
+						var msg = new SendGridMessage();
 
-                        if (dto.CompletionDate.HasValue)
-                        {
-                            emailMessage.Subject = extractFacility.Name + "'s extract is done";
+						msg.From = new EmailAddress("sayonarastatus@nethealth.com", _sayonaraOptions.Value.ApplicationName);
+						msg.AddTo(new EmailAddress(extract.CreatedBy, "Extract Creator"));
 
-                            string path;
-                            if (extract.Format == ExtractType.CSV)
-                                path = _sayonaraOptions.Value.ExtractFolder + "\\CSV";
-                            else
-                                path = _sayonaraOptions.Value.ExtractFolder + "\\PDF";
+						if (dto.CompletionDate.HasValue)
+						{
+							msg.Subject = extractFacility.Name + "'s extract is done";
 
-                            emailMessage.Body = new TextPart("plain") { Text = "Extract is at " + path };
-                        }
-                        else
-                        {
-                            emailMessage.Subject = extractFacility.Name + "'s extract did not complete";
-                            emailMessage.Body = new TextPart("plain") { Text = "Extract did not succesfully complete. Check Status in Sayonara" };
-                        }
+							string path;
+							if (extract.Format == ExtractType.CSV)
+								path = _sayonaraOptions.Value.ExtractFolder + "\\CSV";
+							else
+								path = _sayonaraOptions.Value.ExtractFolder + "\\PDF";
 
-						using (var client = new SmtpClient())
-						{							
-							await client.ConnectAsync(_sayonaraOptions.Value.SMTPServer, Convert.ToInt32(_sayonaraOptions.Value.SMTPPort), SecureSocketOptions.None).ConfigureAwait(false);
-							await client.AuthenticateAsync(_sayonaraOptions.Value.SMTPUsername, _sayonaraOptions.Value.SMTPPassword).ConfigureAwait(false);
-							await client.SendAsync(emailMessage).ConfigureAwait(false);
-							await client.DisconnectAsync(true).ConfigureAwait(false);
+							msg.PlainTextContent = "Extract is at " + path;
 						}
-
+						else
+						{
+							msg.Subject = extractFacility.Name + "'s extract did not complete";
+							msg.PlainTextContent = "Extract did not succesfully complete. Check Status in Sayonara";
+						}							
+						
+						var response = await client.SendEmailAsync(msg);
 					}
-
 				}
 				return Ok();				
 			}
