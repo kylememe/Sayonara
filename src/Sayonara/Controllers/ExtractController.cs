@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Sayonara.Models;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -51,7 +52,7 @@ namespace Sayonara.Controllers
 				return View(extract);
 			else
 				return StatusCode(404);
-		}
+		}        
 
 		[Route("api/Extract/CSV/Next")]		
 		public async Task<IActionResult> NextCSVExtract(System.DateTime scheduledDate)
@@ -248,5 +249,31 @@ namespace Sayonara.Controllers
 			}			
 		}
 
-	}
+        /********************************************************************************
+         * 
+         * Actions for Fedex Site Chrome integration
+         * 
+         * ******************************************************************************/
+
+        [AllowAnonymous]
+        [Route("api/Extract/Detail/{id:int}")]
+        public async Task<IActionResult> APIDetail(int id)
+        {
+            var extract = await _sayonaraContext.Extracts.Where(e => e.ID == id).FirstOrDefaultAsync();
+
+            if (extract != null)
+                return Ok(new
+                {
+                    Contact = extract.ContactName,
+                    Address1 = extract.Address1,
+                    Address2 = extract.Address2,
+                    City = extract.City,
+                    State = extract.State,
+                    ZipCode = extract.ZipCode
+                });
+            else
+                return StatusCode(404);
+        }
+
+    }
 }

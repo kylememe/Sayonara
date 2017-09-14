@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2F93B195-E3E6-4BAA-A445-5601B7E6E7AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{802DE739-242B-45F8-98B6-57DF8AF23F50}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sayonara", "src\Sayonara\Sayonara.csproj", "{BF0562C0-1039-4BE3-9EA5-1C28F7D6EADC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{F12F71C2-3394-48E9-948B-3DD4F534451D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,5 +27,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF0562C0-1039-4BE3-9EA5-1C28F7D6EADC} = {2F93B195-E3E6-4BAA-A445-5601B7E6E7AF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52AAABA4-357E-489B-B0D8-08FA3FEE546E}
 	EndGlobalSection
 EndGlobal
